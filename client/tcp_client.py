@@ -1,6 +1,6 @@
 import ntpath
 import common.constants as C
-from common.communication_exception import CommunicationException
+from common.custom_exceptions import CommunicationException, LogicException
 from common.message_publisher import MessagePublisher
 from common.message_receiver import MessageReceiver
 from client.client_msg_processor import ClientMsgProcessor
@@ -43,11 +43,28 @@ class TcpClient():
         else:
             C.LOG.warning(msg)
 
+    def new_game_request(self, game_name):
+        msg, type = self.__send_message(game_name, T.REQ_NEW_GAME)
+        if type == T.RESP_OK:
+            C.LOG.info("New game created".format(msg))
+            return type
+        else:
+            C.LOG.warning(msg)
+            raise LogicException("New game creation failed with message: {}".format(msg))
+
+    def get_all_games(self):
+        msg, type = self.__send_message(" ", T.REQ_ALL_GAMES)
+        if type == T.RESP_OK:
+            return msg
+        else:
+            C.LOG.warning(msg)
+            raise LogicException("Game requesting failed with error: {}".format(msg))
+
     def __send_message(self, message, type):
         if not self.__connected:
             raise CommunicationException("Server not connected")
 
-        if len(message) > 0:
+        if len(type) > 0:
             try:
                 self.__message_publisher.publish(message_and_type=(message, type))
                 return self.__message_receiver.receive()

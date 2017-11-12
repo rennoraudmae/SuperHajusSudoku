@@ -4,12 +4,13 @@ from threading import Thread
 import common.constants as C
 from server.server_msg_processor import ServerMsgProcessor
 from server.single_client_handler import SingleClientHandler
-
+from sudoku_game import SudokuGame
 
 '''
 This class is tcp server itself. It accepts new connections from clients and assigns them to seperate threads.
 If server is closed, then it stops all the threads.
 '''
+
 
 class TcpServer():
     def __init__(self, server_inet_addr=C.DEFAULT_SERVER_HOST, server_port=C.DEFAULT_SERVER_PORT):
@@ -20,10 +21,11 @@ class TcpServer():
         # member vars
         self.__server_socket = None
         self.__running = False
-        self.processor = ServerMsgProcessor()
+        self.processor = ServerMsgProcessor(self)
         # init
         self.init_server()
-        self.__threads = []
+        self.__client_threads = []
+        self.__active_games = []
 
         self.__serving_thread = Thread(target=self.serve_forever)
 
@@ -48,11 +50,18 @@ class TcpServer():
         self.__server_socket.listen(self.__DEFAULT_SERVER_TCP_CLIENTS_QUEUE)
         C.LOG.info('Accepting requests on TCP %s:%d' % self.__server_socket.getsockname())
 
+    def add_new_game(self, game_name):
+        self.__active_games.append(SudokuGame(game_name))
+
+    def get_all_games(self):
+        return self.__active_games
+
     def serve_forever(self):
         while self.__running:
             try:
                 client_socket, source = self.__server_socket.accept()
-                client_thread = SingleClientHandler(kwargs={'source': source, 'client_socket': client_socket})
+                client_thread = SingleClientHandler(
+                    kwargs={'source': source, 'client_socket': client_socket, 'server': self})
                 client_thread.start()
 
             except (timeout):
@@ -66,7 +75,7 @@ class TcpServer():
         self.__running = False
         self.__server_socket.close()
         self.__serving_thread.join()
-        for client_thread in self.__threads:
+        for client_thread in self.__client_threads:
             client_thread.stop()
             client_thread.join()
         C.LOG.info('Server closed')

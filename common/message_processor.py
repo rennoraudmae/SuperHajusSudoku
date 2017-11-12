@@ -24,6 +24,7 @@ class MessageProcessor():
         self.__init_message(raw_message)
         function_name = T.MSG_TYPES[self._type]
         func = getattr(self, function_name, not_implemented)
+        print "processing {}".format(function_name)
         return func()
 
     def void(self):

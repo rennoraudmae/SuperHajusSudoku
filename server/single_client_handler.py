@@ -8,6 +8,8 @@ from server.server_msg_processor import ServerMsgProcessor
 This is a class, that handles single client processes on server side.
 It runs in it's own thread. Every client, that connets, has it's own thread.
 '''
+
+
 class SingleClientHandler(threading.Thread):
     def __init__(self, group=None, target=None, name=None,
                  args=(), kwargs=None, verbose=None):
@@ -16,8 +18,9 @@ class SingleClientHandler(threading.Thread):
                                                   name=name, verbose=verbose)
         self.kwargs = kwargs
         self.__source = self.kwargs['source']
-        self.__processor = ServerMsgProcessor()
         self.__client_socket = self.kwargs['client_socket']
+        self.__server = self.kwargs['server']
+        self.__processor = ServerMsgProcessor(self.__server)
         self.__running = True
         self.__message_handler = MessageReceiver(socket=self.__client_socket, processor=self.__processor)
         self.__message_publisher = MessagePublisher(socket=self.__client_socket)
