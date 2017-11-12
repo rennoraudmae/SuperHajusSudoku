@@ -50,8 +50,8 @@ class TcpServer():
         self.__server_socket.listen(self.__DEFAULT_SERVER_TCP_CLIENTS_QUEUE)
         C.LOG.info('Accepting requests on TCP %s:%d' % self.__server_socket.getsockname())
 
-    def add_new_game(self, game_name):
-        self.__active_games.append(SudokuGame(game_name))
+    def add_new_game(self, game_name, max_players):
+        self.__active_games.append(SudokuGame(game_name, max_players))
 
     def get_all_games(self):
         return self.__active_games

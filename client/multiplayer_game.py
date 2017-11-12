@@ -13,6 +13,7 @@ class MultiplayerGame(Frame):
         self.game_name_input = None
         self.all_games_var = StringVar()
         self.all_games_var.set("")
+        self.max_users_input = None
         #
         self.pack(side="top", fill="both", expand=True)
         self.grid_rowconfigure(0, weight=1)
@@ -39,10 +40,14 @@ class MultiplayerGame(Frame):
         self.game_name_input = Entry(self)
         self.game_name_input.insert(0, "(insert game name)")
         self.game_name_input.grid(row=2, column=1)
+        self.max_users_input = Entry(self)
+        self.max_users_input.insert(0, "(insert max players number)")
+        self.max_users_input.grid(row=2, column=2)
+        #Row 3
         create_new_game_button = Button(self)
         create_new_game_button["text"] = "Create new game",
         create_new_game_button["command"] = self.create_new_game
-        create_new_game_button.grid(row=2, column=3)
+        create_new_game_button.grid(row=3, column=1)
 
     def retreive_all_games(self):
         self.all_games_var.set(self.client.get_all_games())
@@ -50,9 +55,16 @@ class MultiplayerGame(Frame):
     def create_new_game(self):
         if len(self.game_name_input.get()) <= 0:
             tkMessageBox.showinfo("Message", "Please provide a game name")
+            return
 
         try:
-            self.client.new_game_request(self.game_name_input.get())
+            max_players = int(self.max_users_input.get())
+        except ValueError:
+            tkMessageBox.showinfo("Message", "Please provide valid max players number")
+            return
+
+        try:
+            self.client.new_game_request(self.game_name_input.get(), max_players)
             self.retreive_all_games()
         except LogicException as e:
             tkMessageBox.showerror("Error", e.message)

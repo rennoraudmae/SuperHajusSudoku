@@ -19,8 +19,10 @@ class ServerMsgProcessor(object, MessageProcessor):
         return "", T.RESP_OK
 
     def new_game(self):
-        game_name = self._message
-        self.server.add_new_game(game_name)
+        params = self._message.split(":")
+        game_name = params[0]
+        max_players = params[1]
+        self.server.add_new_game(game_name, max_players)
         return self.success()
 
     def get_all_games(self):

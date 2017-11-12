@@ -43,8 +43,8 @@ class TcpClient():
         else:
             C.LOG.warning(msg)
 
-    def new_game_request(self, game_name):
-        msg, type = self.__send_message(game_name, T.REQ_NEW_GAME)
+    def new_game_request(self, game_name, max_players):
+        msg, type = self.__send_message("{}:{}".format(game_name, max_players), T.REQ_NEW_GAME)
         if type == T.RESP_OK:
             C.LOG.info("New game created".format(msg))
             return type
