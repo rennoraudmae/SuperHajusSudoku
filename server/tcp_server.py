@@ -6,6 +6,11 @@ from server.server_msg_processor import ServerMsgProcessor
 from server.single_client_handler import SingleClientHandler
 
 
+'''
+This class is tcp server itself. It accepts new connections from clients and assigns them to seperate threads.
+If server is closed, then it stops all the threads.
+'''
+
 class TcpServer():
     def __init__(self, server_inet_addr=C.DEFAULT_SERVER_HOST, server_port=C.DEFAULT_SERVER_PORT):
         # constants

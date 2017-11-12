@@ -3,7 +3,11 @@ from socket import SHUT_WR, SHUT_RD, error
 import time
 import re
 
-
+'''
+This class does low-level message receiving. It gathers data from opponent-side by blocks and concatenates these.
+After that, it checks wether the message is valid (minimum length).
+Finally, it gives the message for processor and receives the result.
+'''
 class MessageReceiver():
     def __init__(self, socket, processor):
         self.__socket = socket

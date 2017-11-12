@@ -2,6 +2,9 @@ from Tkinter import *
 import common.constants as C
 from client.tcp_client import TcpClient
 
+'''
+Here is defined client GUI.
+'''
 
 class Application(Frame):
     def __init__(self, master=None):

@@ -1,6 +1,10 @@
 from Tkinter import *
 from client.client_gui import Application
 
+'''
+The main endpoint for client application. It starts GUI.
+'''
+
 
 def main():
     root = Tk()

@@ -5,6 +5,10 @@ import os.path
 from os import listdir
 from os.path import isfile, join
 
+'''
+This is server side message processor, which processes only server specific messages and operations.
+'''
+
 
 class ServerMsgProcessor(object, MessageProcessor):
     def __init__(self):

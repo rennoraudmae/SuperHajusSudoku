@@ -2,6 +2,9 @@ from Tkinter import *
 import common.constants as C
 from server.tcp_server import TcpServer
 
+'''
+Here is defined server GUI
+'''
 
 class Application(Frame):
     def __init__(self, master=None):

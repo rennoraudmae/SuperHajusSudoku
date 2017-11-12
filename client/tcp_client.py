@@ -8,6 +8,10 @@ from socket import socket, AF_INET, SOCK_STREAM
 from socket import error as soc_error, timeout
 import sys
 
+'''
+This is main class for TCP client. It establishes a connection with server.
+It also initializes sending different commands to server and receives responses from server.
+'''
 
 class TcpClient():
     def __init__(self, host=C.DEFAULT_SERVER_HOST, port=C.DEFAULT_SERVER_PORT):

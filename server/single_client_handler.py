@@ -4,7 +4,10 @@ from common.message_receiver import MessageReceiver
 from common.message_publisher import MessagePublisher
 from server.server_msg_processor import ServerMsgProcessor
 
-
+'''
+This is a class, that handles single client processes on server side.
+It runs in it's own thread. Every client, that connets, has it's own thread.
+'''
 class SingleClientHandler(threading.Thread):
     def __init__(self, group=None, target=None, name=None,
                  args=(), kwargs=None, verbose=None):
