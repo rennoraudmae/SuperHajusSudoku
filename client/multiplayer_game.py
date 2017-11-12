@@ -24,23 +24,25 @@ class MultiplayerGame(Frame):
         #
 
     def create_widgets(self):
-        Label(self, text="Create new game").grid(row=1, column=0)
-        self.game_name_input = Entry(self)
-        self.game_name_input.insert(0, "(insert game name)")
-        self.game_name_input.grid(row=1, column=1)
-
-        create_new_game_button = Button(self)
-        create_new_game_button["text"] = "Create new game",
-        create_new_game_button["command"] = self.create_new_game
-        create_new_game_button.grid(row=1, column=3)
-
-        Label(self, text="Available games:").grid(row=0, column=0)
-        Label(self, textvariable=self.all_games_var).grid(row=0, column=1)
+        #Row 0
+        Label(self, text="Logged in user: {}".format(self.username)).grid(row=0, column=0)
+        #Row 1
+        Label(self, text="Available games:").grid(row=1, column=0)
+        Label(self, textvariable=self.all_games_var).grid(row=1, column=1)
         get_games_button = Button(self)
         get_games_button["text"] = "Refresh games list",
         get_games_button["command"] = self.retreive_all_games
-        get_games_button.grid(row=0, column=3)
+        get_games_button.grid(row=1, column=3)
         self.retreive_all_games()
+        #Row 2
+        Label(self, text="Create new game").grid(row=2, column=0)
+        self.game_name_input = Entry(self)
+        self.game_name_input.insert(0, "(insert game name)")
+        self.game_name_input.grid(row=2, column=1)
+        create_new_game_button = Button(self)
+        create_new_game_button["text"] = "Create new game",
+        create_new_game_button["command"] = self.create_new_game
+        create_new_game_button.grid(row=2, column=3)
 
     def retreive_all_games(self):
         self.all_games_var.set(self.client.get_all_games())
