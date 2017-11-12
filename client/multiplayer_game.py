@@ -40,10 +40,10 @@ class MultiplayerGame(Frame):
         get_games_button["text"] = "Refresh games list",
         get_games_button["command"] = self.retreive_all_games
         get_games_button.grid(row=0, column=3)
+        self.retreive_all_games()
 
     def retreive_all_games(self):
         self.all_games_var.set(self.client.get_all_games())
-        self.update_idletasks()
 
     def create_new_game(self):
         if len(self.game_name_input.get()) <= 0:
@@ -51,5 +51,6 @@ class MultiplayerGame(Frame):
 
         try:
             self.client.new_game_request(self.game_name_input.get())
+            self.retreive_all_games()
         except LogicException as e:
             tkMessageBox.showerror("Error", e.message)
