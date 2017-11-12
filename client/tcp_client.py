@@ -14,59 +14,29 @@ class TcpClient():
         self.__host = host
         self.__port = port
 
+        try:
+            self.__socket = socket(AF_INET, SOCK_STREAM)
+            self.__socket.connect((self.__host, self.__port))
+            self.__socket.settimeout(60)
+        except Exception as e:
+            C.LOG.error('Can\'t connect to server, error : %s' % str(e))
+
+        self.__message_publisher = MessagePublisher(socket=self.__socket)
+        self.__message_receiver = MessageReceiver(socket=self.__socket, processor=ClientMsgProcessor())
+
     def send_message(self, message):
-        self.__send_message(message, T.REQ_SIMPLE_MESSAGE)
+        msg, type = self.__send_message(message, T.REQ_SIMPLE_MESSAGE)
+        if type == T.RESP_OK:
+            C.LOG.info("Got answer to simple message: {}".format(msg))
+        else:
+            C.LOG.warning(msg)
 
     def __send_message(self, message, type):
         if len(message) > 0:
             try:
-                s = socket(AF_INET, SOCK_STREAM)
-                s.connect((self.__host, self.__port))
-                s.settimeout(60)
-
-                message_publisher = MessagePublisher(socket=s, message_and_type=(message, type))
-                message_publisher.publish()
-            except Exception as e:
-                C.LOG.error('Can\'t publish message from client, error : %s' % str(e))
-
-            try:
-                message_receiver = MessageReceiver(socket=s, processor=ClientMsgProcessor())
-                return message_receiver.receive()
+                self.__message_publisher.publish(message_and_type=(message, type))
+                return self.__message_receiver.receive()
             except soc_error as e:
                 C.LOG.error('Couldn\'t get response from server, error : %s' % str(e))
             except Exception as e:
                 C.LOG.error("Exception on processing response: {}".format(e))
-
-    def send_file_contents(self, file_path):
-        try:
-            with open(file_path, 'r') as content_file:
-                self.__file_send_routine(content_file.read(), ntpath.basename(file_path))
-                content_file.close()
-        except IOError as e:
-            C.LOG.error('Couldn\'t open file: {}'.format(e.message))
-
-    def __file_send_routine(self, content, file_name):
-        size = sys.getsizeof(content)
-        msg, type = self.__send_message("{}{}{}".format(file_name, C.DELI, size), T.REQ_FILE_NAME_OK)
-
-        if type == T.RESP_OK:
-            self.__send_message("{}{}{}".format(file_name, C.DELI, content), T.REQ_UPLOAD_FILE)
-            C.LOG.info("File successfully uploaded to server!")
-        else:
-            C.LOG.warning(msg)
-
-    def list_all_files(self):
-        msg, type = self.__send_message(" ", T.REQ_ALL_FILE_NAMES)
-
-        if type == T.RESP_OK:
-            C.LOG.info("All files on server: {}".format(msg))
-        else:
-            C.LOG.warning(msg)
-
-    def download_file(self, file_name):
-        msg, type = self.__send_message(file_name, T.REQ_FILE_DOWNLOAD)
-
-        if type == T.RESP_OK:
-            C.LOG.info("File downloaded successfully")
-        else:
-            C.LOG.warning(msg)

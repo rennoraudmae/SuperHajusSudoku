@@ -6,13 +6,14 @@ from socket import error as soc_err
 
 
 class MessagePublisher():
-    def __init__(self, socket, message_and_type):
-        self.__message, self.__type = message_and_type
-        if self.__type not in TYPES.MSG_TYPES:
-            raise Exception("Wrong message type: {}".format(self.__type))
-
+    def __init__(self, socket):
         self.__socket = socket
-        self.__message = "{}{}{}{}".format(self.__type, C.DELI, self.__message, C.MESSAGE_TERMINATOR)
 
-    def publish(self):
-        self.__socket.send(self.__message)
+    def publish(self, message_and_type):
+        message, type = message_and_type
+
+        if type not in TYPES.MSG_TYPES:
+            raise Exception("Wrong message type: {}".format(type))
+
+        message = "{}{}{}{}".format(type, C.DELI, message, C.MESSAGE_TERMINATOR)
+        self.__socket.send(message)

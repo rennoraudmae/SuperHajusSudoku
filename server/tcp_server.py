@@ -2,9 +2,8 @@ from socket import socket, AF_INET, SOCK_STREAM
 from socket import error as soc_error, timeout
 from threading import Thread
 import common.constants as C
-from common.message_receiver import MessageReceiver
 from server.server_msg_processor import ServerMsgProcessor
-from common.message_publisher import MessagePublisher
+from server.single_client_handler import SingleClientHandler
 
 
 class TcpServer():
@@ -15,11 +14,11 @@ class TcpServer():
         self.__DEFAULT_SERVER_TCP_CLIENTS_QUEUE = 10
         # member vars
         self.__server_socket = None
-        self.__client_socket = None
         self.__running = False
         self.processor = ServerMsgProcessor()
         # init
         self.init_server()
+        self.__threads = []
 
         self.__serving_thread = Thread(target=self.serve_forever)
 
@@ -47,41 +46,22 @@ class TcpServer():
     def serve_forever(self):
         while self.__running:
             try:
-                self.__client_socket, source = self.__server_socket.accept()
+                client_socket, source = self.__server_socket.accept()
+                client_thread = SingleClientHandler(kwargs={'source': source, 'client_socket': client_socket})
+                client_thread.start()
 
-                C.LOG.debug('New client connected from %s:%d' % source)
-                message_handler = MessageReceiver(socket=self.__client_socket, processor=self.processor)
-                response_to_send = message_handler.receive()
-
-                C.LOG.debug("Sending back to client: {}".format(response_to_send))
-                message_publisher = MessagePublisher(socket=self.__client_socket, message_and_type=response_to_send)
-                message_publisher.publish()
-
-                C.LOG.info("Message received...")
-                self.__disconnect_client()
             except (timeout):
                 C.LOG.info('Awaiting connections...')
             except (soc_error) as e:
                 C.LOG.error('Interrupted receiving the data from %s:%d, ' \
                             'error: %s' % (source + (e,)))
-                self.__disconnect_client()
                 continue
 
     def stop_server(self):
         self.__running = False
-        self.__disconnect_client()
         self.__server_socket.close()
         self.__serving_thread.join()
+        for client_thread in self.__threads:
+            client_thread.stop()
+            client_thread.join()
         C.LOG.info('Server closed')
-
-    def __disconnect_client(self):
-        try:
-            self.__client_socket.fileno()
-            C.LOG.debug('Closing client socket')
-            self.__client_socket.close()
-            C.LOG.info('Disconnected client')
-        except Exception:
-            C.LOG.debug('Socket closed already ...')
-            return
-        finally:
-            self.__client_socket = None

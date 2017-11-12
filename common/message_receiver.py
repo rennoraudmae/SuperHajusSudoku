@@ -1,5 +1,6 @@
 import common.constants as C
-from socket import SHUT_WR, SHUT_RD
+from socket import SHUT_WR, SHUT_RD, error
+import time
 import re
 
 
@@ -8,11 +9,23 @@ class MessageReceiver():
         self.__socket = socket
         self.__message = ""
         self.__processor = processor
+        self.__running = True
 
     def receive(self):
         terminate = False
-        while 1:
-            block = self.__socket.recv(C.TCP_RECEIVE_BUFFER_SIZE)
+        while self.__running:
+            try:
+                block = self.__socket.recv(C.TCP_RECEIVE_BUFFER_SIZE)
+            except error, (value, message):
+                # No data available
+                time.sleep(0.2)
+                continue
+
+            if len(block) <= 0:
+                # No data available
+                time.sleep(0.2)
+                continue
+
             if block.endswith(C.MESSAGE_TERMINATOR):
                 block = block[:-len(C.MESSAGE_TERMINATOR)]
                 terminate = True
@@ -27,9 +40,14 @@ class MessageReceiver():
             if terminate:
                 break
 
-        return self.__processor.process_message(self.get_message())
+        return self.__processor.process_message(self.__get_message())
 
-    def get_message(self):
-        if len(self.__message) <= 2:
-            raise Exception("Unexpected message from remote system: {}".format(self.__message))
-        return self.__message
+    def __get_message(self):
+        msg_copy = self.__message
+        self.__message = ""
+        if len(msg_copy) <= 2:
+            raise Exception("Unexpected message from remote system: {}".format(msg_copy))
+        return msg_copy
+
+    def stop(self):
+        self.__running = False

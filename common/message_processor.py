@@ -30,3 +30,6 @@ class MessageProcessor():
 
     def error(self):
         return self._message, T.RESP_ERR
+
+    def simple_message(self):
+        return self._message, T.RESP_OK

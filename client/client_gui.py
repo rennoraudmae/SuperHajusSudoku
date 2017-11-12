@@ -12,24 +12,25 @@ class Application(Frame):
         self.port_input = None
         self.files_input = None
         self.create_widgets()
+        self.host = None
+        self.port = None
 
-    def send_file(self):
-        host = self.host_input.get()
-        port = int(self.port_input.get())
-        self.client = TcpClient(host=host, port=port)
-        self.client.send_file_contents(file_path=self.files_input.get())
+    def connect_to_server(self):
+        self.host = self.host_input.get()
+        self.port = int(self.port_input.get())
 
-    def list_files(self):
-        host = self.host_input.get()
-        port = int(self.port_input.get())
-        self.client = TcpClient(host=host, port=port)
-        self.client.list_all_files()
+        if self.host is None:
+            C.LOG.info("No host specified")
+            return
 
-    def download_file(self):
-        host = self.host_input.get()
-        port = int(self.port_input.get())
-        self.client = TcpClient(host=host, port=port)
-        self.client.download_file(self.files_input.get())
+        if self.port is None:
+            C.LOG.info("No port specified")
+            return
+
+        self.client = TcpClient(host=self.host, port=self.port)
+
+    def ping(self):
+        self.client.send_message(message="PING")
 
     def create_widgets(self):
         QUIT = Button(self)
@@ -54,17 +55,11 @@ class Application(Frame):
         self.files_input.grid(row=2, column=1)
 
         send_file = Button(self)
-        send_file["text"] = "SEND FILE",
-        send_file["command"] = self.send_file
+        send_file["text"] = "CONNECT TO SERVER",
+        send_file["command"] = self.connect_to_server
         send_file.grid(row=3, column=0)
 
-        list_files = Button(self)
-        list_files["text"] = "LIST FILES",
-        list_files["command"] = self.list_files
-        list_files.grid(row=4, column=0)
-
-        download_file = Button(self)
-        download_file["text"] = "DOWNLOAD FILE",
-        download_file["command"] = self.download_file
-        download_file.grid(row=4, column=1)
-
+        send_file = Button(self)
+        send_file["text"] = "PING",
+        send_file["command"] = self.ping
+        send_file.grid(row=4, column=0)
