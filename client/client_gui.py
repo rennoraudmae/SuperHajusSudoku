@@ -2,6 +2,7 @@ from Tkinter import *
 import tkMessageBox
 import common.constants as C
 from client.tcp_client import TcpClient
+from multiplayer_game import MultiplayerGame
 
 '''
 Here is defined client GUI.
@@ -9,8 +10,9 @@ Here is defined client GUI.
 
 
 class Application(Frame):
-    def __init__(self, master=None):
+    def __init__(self, master, controller):
         Frame.__init__(self, master)
+        self.controller = controller
         self.host_input = None
         self.port_input = None
         self.user_input = None
@@ -27,8 +29,6 @@ class Application(Frame):
         self.host = self.host_input.get()
         self.port = int(self.port_input.get())
         self.username = self.user_input.get()
-
-        print self.host is None
 
         if self.host is None:
             self.show_info("Error: no server host specified")
@@ -47,8 +47,15 @@ class Application(Frame):
         self.client = TcpClient(host=self.host, port=self.port)
         if self.client.is_connected():
             self.show_info("Connected to server!")
+            self.open_multiplayer_game()
         else:
             self.show_info("Error: connecting to server failed!")
+
+    def open_multiplayer_game(self):
+        multiplayer_game = MultiplayerGame(client=self.client, username=self.username, master=self.master,
+                                           controller=self.controller)
+        multiplayer_game.grid(row=0, column=0, sticky="nsew")
+        self.controller.show_frame(multiplayer_game)
 
     def check_username(self):
         self.username = self.user_input.get()
