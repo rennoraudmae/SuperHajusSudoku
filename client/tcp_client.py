@@ -46,8 +46,8 @@ class TcpClient():
     def new_game_request(self, game_name, max_players):
         msg, type = self.__send_message("{}:{}".format(game_name, max_players), T.REQ_NEW_GAME)
         if type == T.RESP_OK:
-            C.LOG.info("New game created".format(msg))
-            return type
+            C.LOG.info("New game created with id: {}".format(msg))
+            return msg
         else:
             C.LOG.warning(msg)
             raise LogicException("New game creation failed with message: {}".format(msg))

@@ -51,7 +51,9 @@ class TcpServer():
         C.LOG.info('Accepting requests on TCP %s:%d' % self.__server_socket.getsockname())
 
     def add_new_game(self, game_name, max_players):
-        self.__active_games.append(SudokuGame(game_name, max_players))
+        sudoku_game = SudokuGame(game_name, max_players)
+        self.__active_games.append(sudoku_game)
+        return sudoku_game.get_id()
 
     def get_all_games(self):
         return self.__active_games

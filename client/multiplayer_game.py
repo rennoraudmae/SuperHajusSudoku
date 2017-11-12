@@ -25,9 +25,9 @@ class MultiplayerGame(Frame):
         #
 
     def create_widgets(self):
-        #Row 0
+        # Row 0
         Label(self, text="Logged in user: {}".format(self.username)).grid(row=0, column=0)
-        #Row 1
+        # Row 1
         Label(self, text="Available games:").grid(row=1, column=0)
         Label(self, textvariable=self.all_games_var).grid(row=1, column=1)
         get_games_button = Button(self)
@@ -35,7 +35,7 @@ class MultiplayerGame(Frame):
         get_games_button["command"] = self.retreive_all_games
         get_games_button.grid(row=1, column=3)
         self.retreive_all_games()
-        #Row 2
+        # Row 2
         Label(self, text="Create new game").grid(row=2, column=0)
         self.game_name_input = Entry(self)
         self.game_name_input.insert(0, "(insert game name)")
@@ -43,7 +43,7 @@ class MultiplayerGame(Frame):
         self.max_users_input = Entry(self)
         self.max_users_input.insert(0, "(insert max players number)")
         self.max_users_input.grid(row=2, column=2)
-        #Row 3
+        # Row 3
         create_new_game_button = Button(self)
         create_new_game_button["text"] = "Create new game",
         create_new_game_button["command"] = self.create_new_game
@@ -64,7 +64,8 @@ class MultiplayerGame(Frame):
             return
 
         try:
-            self.client.new_game_request(self.game_name_input.get(), max_players)
+            new_game_id = self.client.new_game_request(self.game_name_input.get(), max_players)
             self.retreive_all_games()
+            tkMessageBox.showinfo("New game created", "New game create with id: {}".format(new_game_id))
         except LogicException as e:
             tkMessageBox.showerror("Error", e.message)

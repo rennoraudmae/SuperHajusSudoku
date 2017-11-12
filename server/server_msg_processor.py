@@ -22,8 +22,8 @@ class ServerMsgProcessor(object, MessageProcessor):
         params = self._message.split(":")
         game_name = params[0]
         max_players = params[1]
-        self.server.add_new_game(game_name, max_players)
-        return self.success()
+        new_game_id = self.server.add_new_game(game_name, max_players)
+        return new_game_id, T.RESP_OK
 
     def get_all_games(self):
         sudoku_games = self.server.get_all_games()
@@ -34,7 +34,7 @@ class ServerMsgProcessor(object, MessageProcessor):
         game_names = game_names[:-1]
 
         if len(game_names) == 0:
-            game_names="(No games available yet)"
+            game_names = "(No games available yet)"
 
         return game_names, T.RESP_OK
 
