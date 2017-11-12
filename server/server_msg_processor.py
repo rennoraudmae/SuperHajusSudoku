@@ -27,16 +27,16 @@ class ServerMsgProcessor(object, MessageProcessor):
 
     def get_all_games(self):
         sudoku_games = self.server.get_all_games()
-        game_names = ""
+        game_ids = ""
         for game in sudoku_games:
-            game_names = game_names + game.game_name + ","
+            game_ids = game_ids + game.get_id() + ", "
         # Remove tracing comma
-        game_names = game_names[:-1]
+        game_ids = game_ids[:-1]
 
-        if len(game_names) == 0:
-            game_names = "(No games available yet)"
+        if len(game_ids) == 0:
+            game_ids = "(No games available yet)"
 
-        return game_names, T.RESP_OK
+        return game_ids, T.RESP_OK
 
     def __error(self, message):
         return message, T.RESP_ERR

@@ -52,6 +52,14 @@ class TcpClient():
             C.LOG.warning(msg)
             raise LogicException("New game creation failed with message: {}".format(msg))
 
+    def join_game(self, game_id):
+        msg, type = self.__send_message(game_id, T.REQ_JOIN_GAME)
+        if type == T.RESP_OK:
+            C.LOG.info("Joined game with id: {}".format(game_id))
+        else:
+            C.LOG.warning(msg)
+            raise LogicException("New game creation failed with message: {}".format(msg))
+
     def get_all_games(self):
         msg, type = self.__send_message(" ", T.REQ_ALL_GAMES)
         if type == T.RESP_OK:

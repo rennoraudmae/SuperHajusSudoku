@@ -1,6 +1,7 @@
 REQ_SIMPLE_MESSAGE = '1'
 REQ_NEW_GAME = '2'
 REQ_ALL_GAMES = '3'
+REQ_JOIN_GAME = '4'
 
 RESP_OK = 'a'
 RESP_VOID = 'b'
@@ -13,6 +14,7 @@ The functions are implemented in corresponding msg_processor classes.
 MSG_TYPES = {REQ_SIMPLE_MESSAGE: 'simple_message',
              REQ_NEW_GAME: 'new_game',
              REQ_ALL_GAMES: 'get_all_games',
+             REQ_JOIN_GAME: 'join_game',
              #
              RESP_OK: 'success',
              RESP_VOID: 'void',

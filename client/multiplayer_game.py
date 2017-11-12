@@ -4,6 +4,9 @@ import common.constants as C
 from client.tcp_client import TcpClient
 from common.custom_exceptions import LogicException
 
+"""
+This is GUI for connecting and creating a new sudoku game.
+"""
 
 class MultiplayerGame(Frame):
     def __init__(self, client, username, master, controller):
@@ -14,6 +17,7 @@ class MultiplayerGame(Frame):
         self.all_games_var = StringVar()
         self.all_games_var.set("")
         self.max_users_input = None
+        self.join_session_input = None
         #
         self.pack(side="top", fill="both", expand=True)
         self.grid_rowconfigure(0, weight=1)
@@ -28,13 +32,7 @@ class MultiplayerGame(Frame):
         # Row 0
         Label(self, text="Logged in user: {}".format(self.username)).grid(row=0, column=0)
         # Row 1
-        Label(self, text="Available games:").grid(row=1, column=0)
-        Label(self, textvariable=self.all_games_var).grid(row=1, column=1)
-        get_games_button = Button(self)
-        get_games_button["text"] = "Refresh games list",
-        get_games_button["command"] = self.retreive_all_games
-        get_games_button.grid(row=1, column=3)
-        self.retreive_all_games()
+
         # Row 2
         Label(self, text="Create new game").grid(row=2, column=0)
         self.game_name_input = Entry(self)
@@ -48,6 +46,35 @@ class MultiplayerGame(Frame):
         create_new_game_button["text"] = "Create new game",
         create_new_game_button["command"] = self.create_new_game
         create_new_game_button.grid(row=3, column=1)
+        # Row 4
+        Label(self, text="Available games:").grid(row=4, column=0)
+        Label(self, textvariable=self.all_games_var).grid(row=4, column=1)
+        get_games_button = Button(self)
+        get_games_button["text"] = "Refresh games list",
+        get_games_button["command"] = self.retreive_all_games
+        get_games_button.grid(row=5, column=2)
+        # Row 5,6
+        Label(self, text="Join a game inserting id").grid(row=5, column=0)
+        self.join_session_input = Entry(self)
+        self.join_session_input.insert(0, "(insert game id)")
+        self.join_session_input.grid(row=6, column=0)
+        join_game_btn = Button(self)
+        join_game_btn["text"] = "Join game",
+        join_game_btn["command"] = self.join_game
+        join_game_btn.grid(row=6, column=1)
+
+        self.retreive_all_games()
+
+    def join_game(self):
+        game_id = self.join_session_input.get()
+        if len(game_id) <= 0:
+            tkMessageBox.showerror("Message", "Please provide a game ID")
+            return
+
+        self.client.join_game(game_id)
+
+    def open_game_frame(self):
+        pass #TODO new frame for gameplay
 
     def retreive_all_games(self):
         self.all_games_var.set(self.client.get_all_games())
@@ -69,3 +96,4 @@ class MultiplayerGame(Frame):
             tkMessageBox.showinfo("New game created", "New game create with id: {}".format(new_game_id))
         except LogicException as e:
             tkMessageBox.showerror("Error", e.message)
+
