@@ -1,5 +1,6 @@
 import ntpath
 import common.constants as C
+from common.communication_exception import CommunicationException
 from common.message_publisher import MessagePublisher
 from common.message_receiver import MessageReceiver
 from client.client_msg_processor import ClientMsgProcessor
@@ -13,20 +14,27 @@ This is main class for TCP client. It establishes a connection with server.
 It also initializes sending different commands to server and receives responses from server.
 '''
 
+
 class TcpClient():
     def __init__(self, host=C.DEFAULT_SERVER_HOST, port=C.DEFAULT_SERVER_PORT):
         self.__host = host
         self.__port = port
+        self.__connected = False
 
         try:
             self.__socket = socket(AF_INET, SOCK_STREAM)
             self.__socket.connect((self.__host, self.__port))
             self.__socket.settimeout(60)
+            self.__connected = True
         except Exception as e:
             C.LOG.error('Can\'t connect to server, error : %s' % str(e))
+            return
 
         self.__message_publisher = MessagePublisher(socket=self.__socket)
         self.__message_receiver = MessageReceiver(socket=self.__socket, processor=ClientMsgProcessor())
+
+    def is_connected(self):
+        return self.__connected
 
     def send_message(self, message):
         msg, type = self.__send_message(message, T.REQ_SIMPLE_MESSAGE)
@@ -36,6 +44,9 @@ class TcpClient():
             C.LOG.warning(msg)
 
     def __send_message(self, message, type):
+        if not self.__connected:
+            raise CommunicationException("Server not connected")
+
         if len(message) > 0:
             try:
                 self.__message_publisher.publish(message_and_type=(message, type))
