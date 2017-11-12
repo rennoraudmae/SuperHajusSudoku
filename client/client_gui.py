@@ -1,4 +1,5 @@
 from Tkinter import *
+import tkMessageBox
 import common.constants as C
 from client.tcp_client import TcpClient
 
@@ -13,6 +14,7 @@ class Application(Frame):
         self.host_input = None
         self.port_input = None
         self.user_input = None
+        self.user_listbox_var = StringVar(self)
         #
         self.client = None
         self.pack()
@@ -24,6 +26,7 @@ class Application(Frame):
     def connect_to_server(self):
         self.host = self.host_input.get()
         self.port = int(self.port_input.get())
+        self.username = self.user_input.get()
 
         print self.host is None
 
@@ -37,7 +40,8 @@ class Application(Frame):
 
         if not self.check_username():
             self.show_info(
-                "Error: username not valid. It should containt only alphanumeric characters and must not be longer than 8 characters.")
+                "Error: username {} not valid. It should containt only alphanumeric characters and must not be longer than 8 characters.".format(
+                    self.username))
             return
 
         self.client = TcpClient(host=self.host, port=self.port)
@@ -79,15 +83,25 @@ class Application(Frame):
         self.user_input.insert(0, "(insert user name)")
         self.user_input.grid(row=2, column=1)
 
-        send_file = Button(self)
-        send_file["text"] = "CONNECT TO SERVER",
-        send_file["command"] = self.connect_to_server
-        send_file.grid(row=3, column=0)
+        connect_to_server = Button(self)
+        connect_to_server["text"] = "CONNECT TO SERVER",
+        connect_to_server["command"] = self.connect_to_server
+        connect_to_server.grid(row=3, column=0)
 
-        send_file = Button(self)
-        send_file["text"] = "PING",
-        send_file["command"] = self.ping
-        send_file.grid(row=4, column=0)
+        ping = Button(self)
+        ping["text"] = "PING",
+        ping["command"] = self.ping
+        ping.grid(row=4, column=0)
+
+        self.user_listbox_var.set("Choose a nickname")
+        self.user_listbox_var.trace('w', self.on_dropdown_changed)
+        self.user_listbox = OptionMenu(self, self.user_listbox_var, "Brain112", "Sudoku15", "WhatYou")
+        self.user_listbox.grid(row=2, column=2)
+
+    def on_dropdown_changed(self, index, value, op):
+        self.user_input.delete(0, 'end')
+        self.user_input.insert(0, self.user_listbox_var.get())
 
     def show_info(self, info_msg):
         C.LOG.info(info_msg)
+        tkMessageBox.showinfo("Message", info_msg)
