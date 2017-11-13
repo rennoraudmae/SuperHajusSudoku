@@ -10,7 +10,7 @@ DELI = ":"
 MESSAGE_TERMINATOR = "///END"
 MAX_FOLDER_CAPACITY = 1024 * 1024
 
-#game field constants
+#constatns to draw gamefield
 CELL_SIDE = 60
 PADDING = 20
 FIELD_SIDE = 2 * PADDING + 9 * CELL_SIDE

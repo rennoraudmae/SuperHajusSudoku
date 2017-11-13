@@ -1,4 +1,5 @@
 import re
+import random
 
 
 class SudokuGame():
@@ -9,3 +10,6 @@ class SudokuGame():
 
     def get_id(self):
         return self.__id
+    
+    def __generate_puzzle(self):
+        pass

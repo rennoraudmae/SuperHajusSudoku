@@ -13,11 +13,13 @@ class GameField(Frame):
         Frame.__init__(self, master=master)
         self.master = master
         self.controller = controller
-        #self.pack(side="top", fill="both", expand=True)
         self.draw_field()
-        self.draw_players()
+        self.draw_player_list()
         
     def draw_field(self):
+        #draws sudoku field on the canvas
+        #each cell is drawn as rectangle and after that larger rectangles
+        #are drawn on top to highlight 3x3 box borders
         self.canvas = Canvas(self, width=C.FIELD_SIDE, height=C.FIELD_SIDE)
         self.canvas.grid(row=0, column=1)
         
@@ -35,11 +37,13 @@ class GameField(Frame):
                 x1 = x0 + 3 * C.CELL_SIDE
                 y1 = y0 + 3 * C.CELL_SIDE
                 self.canvas.create_rectangle(x0, y0, x1, y1, width=3)
-    def draw_players(self):
+                
+    def draw_player_list(self):
+        #draws player list1
         self.player_board = Text(self, height=30, width=20)
         self.player_board.grid(row=0, column=0, padx=10, pady=10, sticky='wens')
-        self.player_board.insert(END, 'Player_1\t\t10\n')
-        self.player_board.insert(END, 'Player_2\t\t6\n')
+        #self.player_board.insert(END, 'Player_1\t\t10\n')
+        #self.player_board.insert(END, 'Player_2\t\t6\n')
         self.player_board.config(state=DISABLED)
         
         
