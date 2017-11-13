@@ -2,6 +2,7 @@ from Tkinter import *
 import tkMessageBox
 import common.constants as C
 from client.tcp_client import TcpClient
+from client.game_field import GameField
 from common.custom_exceptions import LogicException
 
 """
@@ -12,12 +13,14 @@ class MultiplayerGame(Frame):
     def __init__(self, client, username, master, controller):
         Frame.__init__(self, master=master)
         self.controller = controller
+        self.master = master
+        self.controller.title('SuperHajusSudoku Client')
         #
         self.game_name_input = None
         self.all_games_var = StringVar()
         self.all_games_var.set("")
         self.max_users_input = None
-        self.join_session_input = None
+        self.join_session_input = None     
         #
         self.pack(side="top", fill="both", expand=True)
         self.grid_rowconfigure(0, weight=1)
@@ -43,7 +46,7 @@ class MultiplayerGame(Frame):
         self.max_users_input.grid(row=2, column=2)
         # Row 3
         create_new_game_button = Button(self)
-        create_new_game_button["text"] = "Create new game",
+        create_new_game_button["text"] = "Create new game"
         create_new_game_button["command"] = self.create_new_game
         create_new_game_button.grid(row=3, column=1)
         # Row 4
@@ -70,11 +73,14 @@ class MultiplayerGame(Frame):
         if len(game_id) <= 0:
             tkMessageBox.showerror("Message", "Please provide a game ID")
             return
-
+        self.open_game_frame()
         self.client.join_game(game_id)
-
+        
+        
     def open_game_frame(self):
-        pass #TODO new frame for gameplay
+        field = GameField(master=self.master, controller=self.controller)
+        field.grid(row=0, column=0, sticky="nsew")
+        self.controller.show_frame(field)
 
     def retreive_all_games(self):
         self.all_games_var.set(self.client.get_all_games())
@@ -83,7 +89,9 @@ class MultiplayerGame(Frame):
         if len(self.game_name_input.get()) <= 0:
             tkMessageBox.showinfo("Message", "Please provide a game name")
             return
-
+        if self.game_name_input.get() in self.all_games_var.get():
+            tkMessageBox.showinfo("Message", "Game with this name allready exists.")
+            return
         try:
             max_players = int(self.max_users_input.get())
         except ValueError:
