@@ -11,13 +11,15 @@ This is GUI for playing the game.
 class GameField(Frame):
     def __init__(self, master, controller):
         Frame.__init__(self, master=master)
-        self.pack(side="top", fill="both", expand=True)
+        self.master = master
+        self.controller = controller
+        #self.pack(side="top", fill="both", expand=True)
         self.draw_field()
-        
+        self.draw_players()
         
     def draw_field(self):
         self.canvas = Canvas(self, width=C.FIELD_SIDE, height=C.FIELD_SIDE)
-        self.canvas.pack(fill="both", side="top")
+        self.canvas.grid(row=0, column=1)
         
         for i in range(9):
             for j in range(9):
@@ -33,24 +35,11 @@ class GameField(Frame):
                 x1 = x0 + 3 * C.CELL_SIDE
                 y1 = y0 + 3 * C.CELL_SIDE
                 self.canvas.create_rectangle(x0, y0, x1, y1, width=3)
-                
-                
-    def draw_field_old(self):
-        #code is based on the example found in the link:
-        #http://newcoder.io/gui/part-3/
-        self.canvas = Canvas(self, width=C.FIELD_SIDE, height=C.FIELD_SIDE)
-        self.canvas.pack(fill="both", side="top")
+    def draw_players(self):
+        self.player_board = Text(self, height=30, width=20)
+        self.player_board.grid(row=0, column=0, padx=10, pady=10, sticky='wens')
+        self.player_board.insert(END, 'Player_1\t\t10\n')
+        self.player_board.insert(END, 'Player_2\t\t6\n')
+        self.player_board.config(state=DISABLED)
         
-        for i in range(10):
-            color = "blue" if i % 3 == 0 else "gray"
-            x0 = C.PADDING + i * C.CELL_SIDE
-            y0 = C.PADDING
-            x1 = C.PADDING + i * C.CELL_SIDE
-            y1 = C.FIELD_SIDE - C.PADDING
-            self.canvas.create_line(x0, y0, x1, y1, fill=color, width=2)
-
-            x0 = C.PADDING
-            y0 = C.PADDING + i * C.CELL_SIDE
-            x1 = C.FIELD_SIDE - C.PADDING
-            y1 = C.PADDING + i * C.CELL_SIDE
-            self.canvas.create_line(x0, y0, x1, y1, fill=color, width=2)
+        
