@@ -19,6 +19,7 @@ class GameField(Frame):
         self.canvas = Canvas(self, width=C.FIELD_SIDE, height=C.FIELD_SIDE)
         self.canvas.grid(row=0, column=1)
         self.canvas.bind("<Button-1>", self.button_click)
+        self.canvas.bind("<Key>", self.key_press)
         self.focused_cell = None
         self.draw_field()
         self.draw_player_list()
@@ -40,20 +41,27 @@ class GameField(Frame):
             self.update_field_from_server()
             time.sleep(0.5)
 
+    def key_press(self, event):
+        key = event.char
+        if key in '123456789':
+            print key
+
     def button_click(self, event):
+
         if self.canvas.find_withtag(CURRENT):
+            self.canvas.focus_set()
             tags = [tag for tag in self.canvas.gettags(CURRENT)]
             if 'cell' in tags:
+                if self.focused_cell != None:
+                    self.canvas.itemconfig('cell', width=1, outline='black')
+                    self.canvas.tag_lower('cell')
+                    self.canvas.update_idletasks()
+                self.focused_cell = (int(tags[0][0]), int(tags[0][1]))
                 self.canvas.itemconfig(CURRENT, width=3, outline='red')
                 self.canvas.tag_raise(CURRENT)
                 self.canvas.tag_raise('numbers')
                 self.canvas.update_idletasks()
-                if self.focused_cell != None:
-                    if self.canvas.find_withtag('%d%d'%self.focused_cell): print 'yes'
-                    self.canvas.itemconfig('%d%d'%self.focused_cell, width=1, outline='black')
-                    self.canvas.tag_lower('%d%d'%self.focused_cell)
-                    self.canvas.update_idletasks()
-                self.focused_cell = (int(tags[0][0]), int(tags[0][1]))
+
 
     def draw_field(self):
         #draws sudoku field on the canvas
@@ -62,11 +70,11 @@ class GameField(Frame):
 
         for i in range(9):
             for j in range(9):
-                x0 = C.PADDING + i * C.CELL_SIDE
-                y0 = C.PADDING + j * C.CELL_SIDE
+                x0 = C.PADDING + j * C.CELL_SIDE
+                y0 = C.PADDING + i * C.CELL_SIDE
                 x1 = x0 + C.CELL_SIDE
                 y1 = y0 + C.CELL_SIDE
-                self.canvas.create_rectangle(x0, y0, x1, y1, tags=('%d%d'%(j,i), 'cell'), fill='white')
+                self.canvas.create_rectangle(x0, y0, x1, y1, tags=('%d%d'%(i,j), 'cell'), fill='white')
         for i in range(3):
             for j in range(3):
                 x0 = C.PADDING + i*3 * C.CELL_SIDE
