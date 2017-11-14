@@ -97,8 +97,9 @@ class TcpClient():
             C.LOG.warning(msg)
             raise LogicException("Could not retreive new field from server: {}".format(msg))
         
-    def send_new_nr(self):
-        pass
+    def send_new_nr(self, nr, address):
+        msg, type = self.__send_message("{}:{}".format(nr, address), T.REQ_CHECK_NR)
+        return type
 
     def __send_message_threadsafe(self, message, type):
         if not self.__connected:

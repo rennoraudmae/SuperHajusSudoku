@@ -91,7 +91,7 @@ class Application(Frame):
         self.user_input.grid(row=2, column=1)
 
         connect_to_server = Button(self)
-        connect_to_server["text"] = "CONNECT TO SERVER",
+        connect_to_server["text"] = "CONNECT TO SERVER"
         connect_to_server["command"] = self.connect_to_server
         connect_to_server.grid(row=3, column=0)
 
