@@ -113,7 +113,7 @@ class TcpClient():
         if len(type) > 0:
             try:
                 self.__message_publisher.publish(message_and_type=(message, type))
-                received_message = self.__message_receiver.receive(50)
+                received_message = self.__message_receiver.receive()
                 return received_message
             except soc_error as e:
                 C.LOG.error('Couldn\'t get response from server, error : %s' % str(e))

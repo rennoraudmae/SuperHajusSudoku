@@ -2,6 +2,7 @@ from common.message_processor import MessageProcessor
 import common.constants as C
 import common.message_types as T
 from common.object_factory import ObjectFactory
+from common.custom_exceptions import LogicException
 import os.path
 from os import listdir
 from os.path import isfile, join
@@ -44,8 +45,14 @@ class ServerMsgProcessor(object, MessageProcessor):
         params = self._message.split(":")
         game_id = params[0]
         username = params[1]
-        self.server.add_player(game_id, username, self.source)
-        return " ", T.RESP_OK
+        try:
+            success = self.server.add_player(game_id, username, self.source)
+            if success:
+                return " ", T.RESP_OK
+            else:
+                return "No such game. Please provide correct ID.", T.RESP_ERR
+        except LogicException as e:
+            return e.message, T.RESP_ERR
 
     def leave_game(self):
         params = self._message.split(":")

@@ -18,8 +18,7 @@ class MessageReceiver():
         self.__processor = processor
         self.__running = True
 
-    def receive(self, try_count):
-        counter = 0
+    def receive(self):
         terminate = False
         while self.__running:
             try:
@@ -27,11 +26,7 @@ class MessageReceiver():
             except error, (value, message):
                 # No data available
                 time.sleep(0.2)
-                counter += 1
                 continue
-
-            if counter > try_count:
-                break
 
             if len(block) <= 0:
                 # No data available
