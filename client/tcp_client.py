@@ -84,7 +84,12 @@ class TcpClient():
             raise LogicException("Game requesting failed with error: {}".format(msg))
     
     def get_player_list(self):
-        pass
+        msg, type = self.__send_message_threadsafe(game_id, T.REQ_PLAYER_LIST)
+        if type == T.RESP_OK:
+            return msg
+        else:
+            C.LOG.warning(msg)
+            raise LogicException("Player list requesting failed with error: {}".format(msg))
 
     def get_game_field(self):
         return self.__game_field
