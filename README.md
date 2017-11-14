@@ -68,6 +68,8 @@ Steps from 1.-4. are basically the same:
    along by clicking {Join game}.
 7. And again the sudoku game_field will appear and you can start to play.
 
+**For leaving the game just push the button under game field "leave game"**
+
 
 
 
