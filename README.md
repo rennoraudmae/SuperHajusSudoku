@@ -72,6 +72,7 @@ Steps from 1.-4. are basically the same:
 8. For playing, you must follow the rules of sudoku, if you didn't know yet how to play then just type into google search
     sudoku basics or something and then you can start to guess numbers. Server will send you feedback numbers on gamefield.
 
+
 **For leaving the game just push the button under game field "leave game"**
 
 
