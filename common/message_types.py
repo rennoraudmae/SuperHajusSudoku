@@ -5,11 +5,13 @@ REQ_JOIN_GAME = '4'
 REQ_LEAVE_GAME = '5'
 REQ_GAME_FIELD = '6'
 REQ_PLAYER_LIST = '7'
-UPDATE_FIELD = '8'
+REQ_CHECK_NR = '8'
+UPDATE_FIELD = '9'
 
 RESP_OK = 'a'
-RESP_VOID = 'b'
-RESP_ERR = 'c'
+RESP_NOK = 'b'
+RESP_VOID = 'c'
+RESP_ERR = 'd'
 
 '''
 Here are defined all message types that can be sent and/or received with their functions.
@@ -22,9 +24,11 @@ MSG_TYPES = {REQ_SIMPLE_MESSAGE: 'simple_message',
              REQ_PLAYER_LIST: 'player_list',
              REQ_GAME_FIELD: 'game_field',
              REQ_LEAVE_GAME: 'leave_game',
+             REQ_CHECK_NR: 'check_nr',
              UPDATE_FIELD: 'get_game_field',
              #
              RESP_OK: 'success',
+             RESP_NOK: 'rejected',
              RESP_VOID: 'void',
              RESP_ERR: 'error'
              }

@@ -36,6 +36,9 @@ class GameField(Frame):
         self.game_matrix = self.client.request_game_field(self.game_id)
         self.draw_numbers()
 
+    def update_players_list_from_server(self):
+        pass
+
     def update_field_thread(self):
         while 1:
             self.update_field_from_server()
@@ -98,8 +101,8 @@ class GameField(Frame):
         #draws player list
         self.player_board = Text(self, height=30, width=20)
         self.player_board.grid(row=0, column=0, padx=10, pady=10, sticky='wens')
-        #self.player_board.insert(END, 'Player_1\t\t10\n')
-        #self.player_board.insert(END, 'Player_2\t\t6\n')
+        self.player_board.insert(END, 'Player_1\t\t10\n')
+        self.player_board.insert(END, 'Player_2\t\t6\n')
         self.player_board.config(state=DISABLED)
 
     def draw_buttons(self):

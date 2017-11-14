@@ -14,6 +14,7 @@ class Application(Frame):
         self.host_input = None
         self.port_input = None
         self.files_input = None
+        self.start_server_btn = None
         self.create_widgets()
 
     def start_server(self):
@@ -21,6 +22,7 @@ class Application(Frame):
         port = int(self.port_input.get())
         self.server = TcpServer(server_inet_addr=host, server_port=port)
         self.server.start_server()
+        self.start_server_btn['state'] = DISABLED
 
     def stop_server(self):
         if self.server != None:
@@ -44,12 +46,7 @@ class Application(Frame):
         self.host_input.insert(0, str(C.DEFAULT_SERVER_HOST))
         self.host_input.grid(row=1, column=1)
 
-        #Label(self, text="File output folder").grid(row=2)
-        #self.files_input = Entry(self)
-       # self.files_input.insert(0, "files")
-        #self.files_input.grid(row=2, column=1)
-
-        start_server = Button(self)
-        start_server["text"] = "Start server"
-        start_server["command"] = self.start_server
-        start_server.grid(row=3, column=0)
+        self.start_server_btn = Button(self)
+        self.start_server_btn["text"] = "Start server"
+        self.start_server_btn["command"] = self.start_server
+        self.start_server_btn.grid(row=3, column=0)

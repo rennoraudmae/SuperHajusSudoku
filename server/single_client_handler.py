@@ -31,7 +31,7 @@ class SingleClientHandler(threading.Thread):
 
     def run(self):
         while self.__running:
-            response_to_send = self.__message_handler.receive(50)
+            response_to_send = self.__message_handler.receive()
 
             C.LOG.debug("Sending back to client: {}".format(response_to_send))
             self.__send_message_threadsafe(response_to_send)
