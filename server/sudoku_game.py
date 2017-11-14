@@ -1,12 +1,13 @@
 import re
 import random
+from common.custom_exceptions import LogicException
 from server.player import Player
 
 
 class SudokuGame():
     def __init__(self, game_name, max_players=2):
         self.game_name = game_name
-        self.max_players = max_players
+        self.max_players = int(max_players)
         self.__id = re.sub('[^A-Za-z0-9]+', '', self.game_name)
         self.players = {}
         self.game_field, self.solution = self.__generate_puzzle()
@@ -60,6 +61,11 @@ class SudokuGame():
         return False
 
     def add_player(self, username, source):
+        if self.players.has_key(username):
+            raise LogicException("There is already someone in this game named {}".format(username))
+
+        if len(self.players.values()) >= self.max_players:
+            raise LogicException("Maximum number of players reached!")
         player = Player(username, source)
         self.players[username] = player
         self.trigger_field_change()
