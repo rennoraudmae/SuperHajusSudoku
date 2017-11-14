@@ -55,6 +55,11 @@ class GameField(Frame):
         create_new_game_button["command"] = self.leave_game
         create_new_game_button.grid(row=3, column=0)
 
+
     def leave_game(self):
         self.client.leave_game(self.game_id)
+        self.destroy()
+
+
+
 
