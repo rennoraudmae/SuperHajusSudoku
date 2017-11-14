@@ -13,6 +13,15 @@ class GameField(Frame):
         Frame.__init__(self, master=master)
         self.master = master
         self.controller = controller
+        self.game_matrix = [['-',1,'-','-',2,'-','-',3,'-'],
+                            ['-',9,'-','-','-',4,'-','-','-'],
+                            ['-',7,'-','-',5,'-',1,'-','-'],
+                            [2,'-',1,'-','-','-','-','-',9],
+                            ['-','-','-','-',8,1,'-',5,'-'],
+                            ['-','-','-','-','-','-','-','-',4],
+                            [9,'-','-',5,'-','-','-','-',2],
+                            ['-','-','-',6,'-','-','-','-',3],
+                            [3,'-','-','-','-','-',7,'-','-']]
         self.draw_field()
         self.draw_numbers()
         self.draw_player_list()
@@ -44,25 +53,16 @@ class GameField(Frame):
                 self.canvas.create_rectangle(x0, y0, x1, y1, width=3)
 
     def draw_numbers(self):
-        numbers = [['-',1,'-','-',2,'-','-',3,'-'],
-                  ['-',9,'-','-','-',4,'-','-','-'],
-                  ['-',7,'-','-',5,'-',1,'-','-'],
-                  [2,'-',1,'-','-','-','-','-',9],
-                  ['-','-','-','-',8,1,'-',5,'-'],
-                  ['-','-','-','-','-','-','-','-',4],
-                  [9,'-','-',5,'-','-','-','-',2],
-                  ['-','-','-',6,'-','-','-','-',3],
-                  [3,'-','-','-','-','-',7,'-','-']]
-
+        self.canvas.delete('numbers')
         for i in range(9):
             for j in range(9):
-                number = numbers[j][i]
+                number = self.game_matrix[j][i]
                 if not isinstance(number,int):
                     continue
                 x=C.PADDING + i * C.CELL_SIDE + 0.5 * C.CELL_SIDE
                 y=C.PADDING + j * C.CELL_SIDE + 0.5 * C.CELL_SIDE
-
-                self.canvas.create_text(x, y, text=str(number), font=('Arial', 24))
+                self.canvas.create_text(x, y, text=str(number), font=('Arial', 24,'bold'), tags='numbers')
+                
     def draw_player_list(self):
         #draws player list
         self.player_board = Text(self, height=30, width=20)
