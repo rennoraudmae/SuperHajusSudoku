@@ -43,3 +43,6 @@ class SudokuGame():
 
     def add_player(self,username):
         self.players.append(username)
+
+    def remove_player(self, username):
+        self.players.remove(username)

@@ -60,8 +60,8 @@ class TcpClient():
             C.LOG.warning(msg)
             raise LogicException("New game creation failed with message: {}".format(msg))
 
-    def leave_game(self, game_id):
-        msg, type = self.__send_message(game_id, T.REQ_LEAVE_GAME)
+    def leave_game(self, game_id, username):
+        msg, type = self.__send_message("{}:{}".format(game_id, username), T.REQ_LEAVE_GAME)
         if type == T.RESP_OK:
             C.LOG.info("Left game with id: {}".format(game_id))
         else:

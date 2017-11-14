@@ -59,6 +59,11 @@ class TcpServer():
         sudoku_game=self.__active_games[game_id]
         sudoku_game.add_player(username)
 
+    def remove_player(self, game_id, username):
+        sudoku_game = self.__active_games[game_id]
+        sudoku_game.remove_player(username)
+
+
 
 
     def get_all_games(self):

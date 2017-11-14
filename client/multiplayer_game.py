@@ -75,7 +75,7 @@ class MultiplayerGame(Frame):
         self.open_game_frame(game_id)
         
     def open_game_frame(self, game_id):
-        field = GameField(master=self.master, controller=self.controller,client=self.client, game_id=game_id)
+        field = GameField(master=self.master, controller=self.controller,client=self.client, game_id=game_id, username=self.username)
         field.grid(row=0, column=0, sticky="nsew")
         self.controller.show_frame(field)
 

@@ -46,7 +46,10 @@ class ServerMsgProcessor(object, MessageProcessor):
         return " ", T.RESP_OK
 
     def leave_game(self):
-        game_id = self._message
+        params = self._message.split(":")
+        game_id = params[0]
+        username = params[1]
+        self.server.remove_player(game_id, username)
         return " ", T.RESP_OK
 
     def get_player_list(self):
