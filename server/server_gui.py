@@ -20,7 +20,6 @@ class Application(Frame):
         host = self.host_input.get()
         port = int(self.port_input.get())
         self.server = TcpServer(server_inet_addr=host, server_port=port)
-        self.server.set_files_folder(self.files_input.get())
         self.server.start_server()
 
     def stop_server(self):
@@ -45,10 +44,10 @@ class Application(Frame):
         self.host_input.insert(0, str(C.DEFAULT_SERVER_HOST))
         self.host_input.grid(row=1, column=1)
 
-        Label(self, text="File output folder").grid(row=2)
-        self.files_input = Entry(self)
-        self.files_input.insert(0, "files")
-        self.files_input.grid(row=2, column=1)
+        #Label(self, text="File output folder").grid(row=2)
+        #self.files_input = Entry(self)
+       # self.files_input.insert(0, "files")
+        #self.files_input.grid(row=2, column=1)
 
         start_server = Button(self)
         start_server["text"] = "Start server"
