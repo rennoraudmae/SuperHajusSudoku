@@ -10,3 +10,6 @@ class Player():
 
     def get_username(self):
         return self.__username
+
+    def get_score(self):
+        return self.__score

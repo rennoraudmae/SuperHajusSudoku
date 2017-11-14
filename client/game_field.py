@@ -22,6 +22,7 @@ class GameField(Frame):
         self.canvas.bind("<Key>", self.key_press)
         self.focused_cell = None
         self.draw_field()
+        self.player_board = Listbox(self, height=30, width=20)
         self.draw_player_list()
         self.draw_buttons()
         self.client = client
@@ -37,11 +38,13 @@ class GameField(Frame):
         self.draw_numbers()
 
     def update_players_list_from_server(self):
-        pass
+        players_list = self.client.request_players(self.game_id)
+        self.update_players_list(players_list)
 
     def update_field_thread(self):
         while 1:
             self.update_field_from_server()
+            self.update_players_list_from_server()
             time.sleep(0.5)
 
     def key_press(self, event):
@@ -98,12 +101,15 @@ class GameField(Frame):
                 self.canvas.create_text(x, y, text=str(number), font=('Arial', 24,'bold'), tags='numbers')
 
     def draw_player_list(self):
-        #draws player list
-        self.player_board = Text(self, height=30, width=20)
         self.player_board.grid(row=0, column=0, padx=10, pady=10, sticky='wens')
-        self.player_board.insert(END, 'Player_1\t\t10\n')
-        self.player_board.insert(END, 'Player_2\t\t6\n')
-        self.player_board.config(state=DISABLED)
+        #self.player_board.config(state=DISABLED)
+
+    def update_players_list(self, players):
+        self.player_board.delete(0, END)
+        self.player_board.insert(0, "Player   -   Score")
+        for i, player in enumerate(players):
+            player_str = "{}   -   {}".format(player[0], player[1])
+            self.player_board.insert(i+1,  player_str)
 
     def draw_buttons(self):
         create_new_game_button = Button(self)

@@ -17,10 +17,16 @@ class ObjectFactory():
         field_arr = json.loads(field_json)
         return field_arr
 
+    @staticmethod
     def players_to_json(players):
-        players_json = json.dumps(players)
+        players_arr = []
+        for player in players.values():
+            players_arr.append((player.get_username(), player.get_score()))
+
+        players_json = json.dumps(players_arr)
         return players_json
 
+    @staticmethod
     def players_from_json(players_json):
-        players = json.loads(players_json)
-        return players
+        players_arr = json.loads(players_json)
+        return players_arr
