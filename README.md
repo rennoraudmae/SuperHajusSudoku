@@ -30,7 +30,7 @@ It will create the Sudoku game server, in where, it is possible to start games
 
 As it is multiplayer game, then that point can be done in two variations
 
-If there is only one client, then you must open the game as well:
+If there is only **one client**, then you must open the game as well:
 
 1. Specify the same port number, as you added for server
 2. Insert the same ip address, as server has
@@ -50,6 +50,8 @@ For example:
 
 6. If all the blanks are filled then push the button {Join game}
 7. Finally the sudoku game_field will appear and you can start to play
+
+
 
 
 
