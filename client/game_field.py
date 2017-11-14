@@ -17,6 +17,7 @@ class GameField(Frame):
         self.canvas = Canvas(self, width=C.FIELD_SIDE, height=C.FIELD_SIDE)
         self.canvas.grid(row=0, column=1)
         self.canvas.bind("<Button-1>", self.button_click)
+        self.canvas.bind("<Key>", self.key_press)
         self.focused_cell = None
         self.draw_field()
         self.draw_player_list()
@@ -30,9 +31,15 @@ class GameField(Frame):
         self.game_matrix = self.client.get_game_field(self.game_id)
         self.draw_numbers()
 
-
+    def key_press(self, event):
+        key = event.char
+        if key in '123456789':
+            print key
+        
     def button_click(self, event):
+        
         if self.canvas.find_withtag(CURRENT):
+            self.canvas.focus_set()
             tags = [tag for tag in self.canvas.gettags(CURRENT)]
             if 'cell' in tags:
                 if self.focused_cell != None:
@@ -58,7 +65,6 @@ class GameField(Frame):
                 x1 = x0 + C.CELL_SIDE
                 y1 = y0 + C.CELL_SIDE
                 self.canvas.create_rectangle(x0, y0, x1, y1, tags=('%d%d'%(i,j), 'cell'), fill='white')
-                #self.canvas.create_text(x0 + C.CELL_SIDE/2, y0 + C.CELL_SIDE/2, text='%d%d'%(i,j))
         for i in range(3):
             for j in range(3):
                 x0 = C.PADDING + i*3 * C.CELL_SIDE
