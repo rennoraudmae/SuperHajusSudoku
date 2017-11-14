@@ -3,6 +3,8 @@ import tkMessageBox
 import common.constants as C
 from client.tcp_client import TcpClient
 from common.custom_exceptions import LogicException
+import threading
+import time
 
 """
 This is GUI for playing the game.
@@ -26,10 +28,17 @@ class GameField(Frame):
         self.username = username
         self.update_field_from_server()
 
+        receive_thread = threading.Thread(target=self.update_field_thread, args=())
+        receive_thread.start()
+
     def update_field_from_server(self):
-        self.game_matrix = self.client.get_game_field(self.game_id)
+        self.game_matrix = self.client.request_game_field(self.game_id)
         self.draw_numbers()
 
+    def update_field_thread(self):
+        while 1:
+            self.update_field_from_server()
+            time.sleep(0.5)
 
     def button_click(self, event):
         if self.canvas.find_withtag(CURRENT):
