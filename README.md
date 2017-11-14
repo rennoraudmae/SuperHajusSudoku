@@ -9,7 +9,7 @@ Server- where all the server side of communication is located
 Common- where all the common part of files are located, for server and client side both
 
 
-How to use the program:
+## How to use the program:
 
 First of all we have to start server side. For that it's needed to open main program file SuperHajusSudoku/server/main.py.
 
