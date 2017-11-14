@@ -1,4 +1,5 @@
 import common.constants as C
+import common.message_types as T
 from socket import SHUT_WR, SHUT_RD, error
 import time
 import re
@@ -8,6 +9,8 @@ This class does low-level message receiving. It gathers data from opponent-side 
 After that, it checks wether the message is valid (minimum length).
 Finally, it gives the message for processor and receives the result.
 '''
+
+
 class MessageReceiver():
     def __init__(self, socket, processor):
         self.__socket = socket
@@ -15,7 +18,8 @@ class MessageReceiver():
         self.__processor = processor
         self.__running = True
 
-    def receive(self):
+    def receive(self, try_count):
+        counter = 0
         terminate = False
         while self.__running:
             try:
@@ -23,7 +27,11 @@ class MessageReceiver():
             except error, (value, message):
                 # No data available
                 time.sleep(0.2)
+                counter += 1
                 continue
+
+            if counter > try_count:
+                break
 
             if len(block) <= 0:
                 # No data available
@@ -44,13 +52,16 @@ class MessageReceiver():
             if terminate:
                 break
 
-        return self.__processor.process_message(self.__get_message())
+        msg_copy = self.__get_message()
+
+        if len(msg_copy) < 3:
+            return "No message received", T.RESP_VOID
+
+        return self.__processor.process_message(msg_copy)
 
     def __get_message(self):
         msg_copy = self.__message
         self.__message = ""
-        if len(msg_copy) <= 2:
-            raise Exception("Unexpected message from remote system: {}".format(msg_copy))
         return msg_copy
 
     def stop(self):

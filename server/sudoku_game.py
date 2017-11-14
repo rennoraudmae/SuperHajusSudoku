@@ -10,6 +10,13 @@ class SudokuGame():
         self.__id = re.sub('[^A-Za-z0-9]+', '', self.game_name)
         self.players = {}
         self.game_field, self.solution = self.__generate_puzzle()
+        self.field_change_func = self.do_nothing
+
+    def do_nothing(self, arg):
+        pass
+
+    def set_field_change_func(self, func):
+        self.field_change_func = func
 
     def get_id(self):
         return self.__id
@@ -39,17 +46,26 @@ class SudokuGame():
         pass
 
     def add_nr(self, nr, address):
+        self.trigger_field_change()
         pass
 
     def check_game_state(self):
         pass
 
-    def add_player(self, username):
-        player = Player(username)
+    def add_player(self, username, source):
+        player = Player(username, source)
         self.players[username] = player
+        self.trigger_field_change()
 
     def remove_player(self, username):
         del self.players[username]
+        self.trigger_field_change()
 
     def get_game_field(self):
         return self.game_field
+
+    def get_players(self):
+        return self.players
+
+    def trigger_field_change(self):
+        self.field_change_func(self.__id)
