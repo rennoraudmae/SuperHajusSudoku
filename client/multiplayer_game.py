@@ -71,7 +71,7 @@ class MultiplayerGame(Frame):
         if len(game_id) <= 0:
             tkMessageBox.showerror("Message", "Please provide a game ID")
             return
-        self.client.join_game(game_id)
+        self.client.join_game(game_id, self.username)
         self.open_game_frame(game_id)
         
     def open_game_frame(self, game_id):

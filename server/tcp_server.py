@@ -25,7 +25,7 @@ class TcpServer():
         # init
         self.init_server()
         self.__client_threads = []
-        self.__active_games = []
+        self.__active_games = {}
 
         self.__serving_thread = Thread(target=self.serve_forever)
 
@@ -52,11 +52,17 @@ class TcpServer():
 
     def add_new_game(self, game_name, max_players):
         sudoku_game = SudokuGame(game_name, max_players)
-        self.__active_games.append(sudoku_game)
+        self.__active_games[sudoku_game.get_id()] = sudoku_game
         return sudoku_game.get_id()
 
+    def add_player(self, game_id, username):
+        sudoku_game=self.__active_games[game_id]
+        sudoku_game.add_player(username)
+
+
+
     def get_all_games(self):
-        return self.__active_games
+        return self.__active_games.values()
 
     def serve_forever(self):
         while self.__running:

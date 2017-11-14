@@ -27,7 +27,7 @@ class ServerMsgProcessor(object, MessageProcessor):
 
     def get_all_games(self):
         sudoku_games = self.server.get_all_games()
-        game_ids = ""
+        game_ids = " "
         for game in sudoku_games:
             game_ids = game_ids + game.get_id() + ", "
         # Remove tracing comma
@@ -39,7 +39,10 @@ class ServerMsgProcessor(object, MessageProcessor):
         return game_ids, T.RESP_OK
 
     def join_game(self):
-        game_id = self._message
+        params = self._message.split(":")
+        game_id = params[0]
+        username = params[1]
+        self.server.add_player(game_id, username)
         return " ", T.RESP_OK
 
     def leave_game(self):
