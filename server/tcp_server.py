@@ -56,18 +56,19 @@ class TcpServer():
         return sudoku_game.get_id()
 
     def add_player(self, game_id, username):
-        sudoku_game=self.__active_games[game_id]
+        sudoku_game = self.__active_games[game_id]
         sudoku_game.add_player(username)
 
     def remove_player(self, game_id, username):
         sudoku_game = self.__active_games[game_id]
         sudoku_game.remove_player(username)
 
-
-
-
     def get_all_games(self):
         return self.__active_games.values()
+
+    def get_game_field(self, game_id):
+        sudoku_game = self.__active_games[game_id]
+        return sudoku_game.get_game_field()
 
     def serve_forever(self):
         while self.__running:

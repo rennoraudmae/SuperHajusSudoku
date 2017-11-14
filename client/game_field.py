@@ -13,23 +13,19 @@ class GameField(Frame):
         Frame.__init__(self, master=master)
         self.master = master
         self.controller = controller
-        self.game_matrix = [['-',1,'-','-',2,'-','-',3,'-'],
-                            ['-',9,'-','-','-',4,'-','-','-'],
-                            ['-',7,'-','-',5,'-',1,'-','-'],
-                            [2,'-',1,'-','-','-','-','-',9],
-                            ['-','-','-','-',8,1,'-',5,'-'],
-                            ['-','-','-','-','-','-','-','-',4],
-                            [9,'-','-',5,'-','-','-','-',2],
-                            ['-','-','-',6,'-','-','-','-',3],
-                            [3,'-','-','-','-','-',7,'-','-']]
+        self.game_matrix = []
         self.draw_field()
-        self.draw_numbers()
         self.draw_player_list()
         self.draw_buttons()
         self.client = client
         self.game_id = game_id
         self.username = username
-        
+        self.update_field_from_server()
+
+    def update_field_from_server(self):
+        self.game_matrix = self.client.get_game_field(self.game_id)
+        self.draw_numbers()
+
     def draw_field(self):
         #draws sudoku field on the canvas
         #each cell is drawn as rectangle and after that larger rectangles
