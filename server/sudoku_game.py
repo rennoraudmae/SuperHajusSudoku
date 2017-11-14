@@ -50,3 +50,6 @@ class SudokuGame():
 
     def remove_player(self, username):
         del self.players[username]
+
+    def get_game_field(self):
+        return self.game_field

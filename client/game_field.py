@@ -13,27 +13,24 @@ class GameField(Frame):
         Frame.__init__(self, master=master)
         self.master = master
         self.controller = controller
-        self.game_matrix = [['-',1,'-','-',2,'-','-',3,'-'],
-                            ['-',9,'-','-','-',4,'-','-','-'],
-                            ['-',7,'-','-',5,'-',1,'-','-'],
-                            [2,'-',1,'-','-','-','-','-',9],
-                            ['-','-','-','-',8,1,'-',5,'-'],
-                            ['-','-','-','-','-','-','-','-',4],
-                            [9,'-','-',5,'-','-','-','-',2],
-                            ['-','-','-',6,'-','-','-','-',3],
-                            [3,'-','-','-','-','-',7,'-','-']]
+        self.game_matrix = []
         self.canvas = Canvas(self, width=C.FIELD_SIDE, height=C.FIELD_SIDE)
         self.canvas.grid(row=0, column=1)
         self.canvas.bind("<Button-1>", self.button_click)
         self.focused_cell = None
         self.draw_field()
-        self.draw_numbers()
         self.draw_player_list()
         self.draw_buttons()
         self.client = client
         self.game_id = game_id
         self.username = username
-    
+        self.update_field_from_server()
+
+    def update_field_from_server(self):
+        self.game_matrix = self.client.get_game_field(self.game_id)
+        self.draw_numbers()
+
+
     def button_click(self, event):
         if self.canvas.find_withtag(CURRENT):
             tags = [tag for tag in self.canvas.gettags(CURRENT)]
@@ -53,7 +50,7 @@ class GameField(Frame):
         #draws sudoku field on the canvas
         #each cell is drawn as rectangle and after that larger rectangles
         #are drawn on top to highlight 3x3 box borders
-        
+
         for i in range(9):
             for j in range(9):
                 x0 = C.PADDING + j * C.CELL_SIDE
@@ -80,7 +77,7 @@ class GameField(Frame):
                 x=C.PADDING + i * C.CELL_SIDE + 0.5 * C.CELL_SIDE
                 y=C.PADDING + j * C.CELL_SIDE + 0.5 * C.CELL_SIDE
                 self.canvas.create_text(x, y, text=str(number), font=('Arial', 24,'bold'), tags='numbers')
-                
+
     def draw_player_list(self):
         #draws player list
         self.player_board = Text(self, height=30, width=20)
