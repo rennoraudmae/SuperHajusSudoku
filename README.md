@@ -52,6 +52,8 @@ For example:
 
 8. If all the blanks are filled then push the button {Join game}.
 9. Finally the sudoku game_field will appear and you can start to play.
+10. For playing, you must follow the rules of sudoku, if you didn't know yet how to play then just type into google search
+    sudoku basics or something and then you can start to guess numbers. Server will send you feedback numbers on gamefield.
 
 **Second Option to join the game, if game is already created**
 
@@ -67,6 +69,8 @@ Steps from 1.-4. are basically the same:
 6. If new_sudoku or whatever name of the game is inserted into blank "join a game inserting id" then we can start to play
    along by clicking {Join game}.
 7. And again the sudoku game_field will appear and you can start to play.
+8. For playing, you must follow the rules of sudoku, if you didn't know yet how to play then just type into google search
+    sudoku basics or something and then you can start to guess numbers. Server will send you feedback numbers on gamefield.
 
 **For leaving the game just push the button under game field "leave game"**
 
