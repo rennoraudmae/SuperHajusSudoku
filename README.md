@@ -1,6 +1,6 @@
 # SuperHajusSudoku
 
-##Program description
+## Program description
 
 Program "SuperHajusSudoku" consists of three main modules:
 
@@ -38,13 +38,14 @@ If there is only one client, then you must open the game as well:
 5. In the blank - (insert game id) you have enter the name from list of Available games.
 
 For example:
+
 - create new game: new_sudoku
 - max players: 3
 - Available games: new_sudoku
 - Join a game inserting id: new_sudoku
 
-6.If all the blanks are filled then push {Join game}
-7.Finally the sudoku game_field will appear and you can start to play
+6. If all the blanks are filled then push {Join game}
+7. Finally the sudoku game_field will appear and you can start to play
 
 
 
