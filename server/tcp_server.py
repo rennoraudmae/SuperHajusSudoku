@@ -52,8 +52,12 @@ class TcpServer():
         return sudoku_game.get_id()
 
     def add_player(self, game_id, username, source):
-        sudoku_game = self.__active_games[game_id]
-        sudoku_game.add_player(username, source)
+        if self.__active_games.has_key(game_id):
+            sudoku_game = self.__active_games[game_id]
+            sudoku_game.add_player(username, source)
+            return True
+        else:
+            return False
 
     def remove_player(self, game_id, username):
         sudoku_game = self.__active_games[game_id]
