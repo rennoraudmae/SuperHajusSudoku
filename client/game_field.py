@@ -102,7 +102,6 @@ class GameField(Frame):
 
     def draw_player_list(self):
         self.player_board.grid(row=0, column=0, padx=10, pady=10, sticky='wens')
-        #self.player_board.config(state=DISABLED)
 
     def update_players_list(self, players):
         self.player_board.delete(0, END)
