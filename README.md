@@ -1,5 +1,7 @@
 # SuperHajusSudoku
 
+##Program description
+
 Program "SuperHajusSudoku" consists of three main modules:
 
 Client- where all the client side of communication is located
@@ -9,9 +11,9 @@ Server- where all the server side of communication is located
 Common- where all the common part of files are located, for server and client side both
 
 
-How to use the program:
+## How to use the program:
 
-First of all we have to start server side. For that it's needed to open main program file SuperHajusSudoku/server/main.py.
+##First of all we have to start server side. For that it's needed to open main program file SuperHajusSudoku/server/main.py.
 
 That will open the GUI, where it is needed to specify two parameters:
 
@@ -22,7 +24,7 @@ That will open the GUI, where it is needed to specify two parameters:
 It will create the Sudoku game server, in where, it is possible to start games
 
 
-Secondly must open the client side, as it is multiplayer game, then that point can be done in two variations
+###Secondly must open the client side, as it is multiplayer game, then that point can be done in two variations
 
 If you are only client, then you must open the game as well:
 
@@ -40,6 +42,7 @@ Join a game inserting id:
 new_sudoku
 
 6.If all the blanks are filled then push {Join game}
-7.Finally the sudoku game_field will appear
+7.Finally the sudoku game_field will appear and you can start to play
+
 
 
