@@ -9,12 +9,15 @@ This is GUI for playing the game.
 """
 
 class GameField(Frame):
-    def __init__(self, master, controller):
+    def __init__(self, master, controller, client, game_id):
         Frame.__init__(self, master=master)
         self.master = master
         self.controller = controller
         self.draw_field()
         self.draw_player_list()
+        self.draw_buttons()
+        self.client = client
+        self.game_id = game_id
         
     def draw_field(self):
         #draws sudoku field on the canvas
@@ -45,5 +48,13 @@ class GameField(Frame):
         #self.player_board.insert(END, 'Player_1\t\t10\n')
         #self.player_board.insert(END, 'Player_2\t\t6\n')
         self.player_board.config(state=DISABLED)
-        
-        
+
+    def draw_buttons(self):
+        create_new_game_button = Button(self)
+        create_new_game_button["text"] = "Leave Game"
+        create_new_game_button["command"] = self.leave_game
+        create_new_game_button.grid(row=3, column=0)
+
+    def leave_game(self):
+        self.client.leave_game(self.game_id)
+
