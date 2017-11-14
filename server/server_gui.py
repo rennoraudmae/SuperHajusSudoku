@@ -51,6 +51,6 @@ class Application(Frame):
         self.files_input.grid(row=2, column=1)
 
         start_server = Button(self)
-        start_server["text"] = "Start server",
+        start_server["text"] = "Start server"
         start_server["command"] = self.start_server
         start_server.grid(row=3, column=0)

@@ -37,6 +37,12 @@ class ServerMsgProcessor(object, MessageProcessor):
             game_ids = "(No games available yet)"
 
         return game_ids, T.RESP_OK
-
+        
+    def join_game(self):
+        pass
+    def get_player_list(self):
+        pass
+    def get_game_field(self):
+        pass 
     def __error(self, message):
         return message, T.RESP_ERR

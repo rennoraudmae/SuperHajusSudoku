@@ -39,7 +39,7 @@ class GameField(Frame):
                 self.canvas.create_rectangle(x0, y0, x1, y1, width=3)
                 
     def draw_player_list(self):
-        #draws player list1
+        #draws player list
         self.player_board = Text(self, height=30, width=20)
         self.player_board.grid(row=0, column=0, padx=10, pady=10, sticky='wens')
         #self.player_board.insert(END, 'Player_1\t\t10\n')

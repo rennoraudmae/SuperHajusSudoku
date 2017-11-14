@@ -67,6 +67,15 @@ class TcpClient():
         else:
             C.LOG.warning(msg)
             raise LogicException("Game requesting failed with error: {}".format(msg))
+    
+    def get_player_list(self):
+        pass
+        
+    def get_game_field(self):
+        pass
+        
+    def send_new_nr(self):
+        pass
 
     def __send_message(self, message, type):
         if not self.__connected:
