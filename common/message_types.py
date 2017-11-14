@@ -15,6 +15,8 @@ MSG_TYPES = {REQ_SIMPLE_MESSAGE: 'simple_message',
              REQ_NEW_GAME: 'new_game',
              REQ_ALL_GAMES: 'get_all_games',
              REQ_JOIN_GAME: 'join_game',
+             REQ_PLAYER_LIST: 'player_list',
+             REQ_GAME_FIELD: 'game_field',
              #
              RESP_OK: 'success',
              RESP_VOID: 'void',
