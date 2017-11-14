@@ -13,37 +13,51 @@ class GameField(Frame):
         Frame.__init__(self, master=master)
         self.master = master
         self.controller = controller
-        self.game_matrix = [['-',1,'-','-',2,'-','-',3,'-'],
-                            ['-',9,'-','-','-',4,'-','-','-'],
-                            ['-',7,'-','-',5,'-',1,'-','-'],
-                            [2,'-',1,'-','-','-','-','-',9],
-                            ['-','-','-','-',8,1,'-',5,'-'],
-                            ['-','-','-','-','-','-','-','-',4],
-                            [9,'-','-',5,'-','-','-','-',2],
-                            ['-','-','-',6,'-','-','-','-',3],
-                            [3,'-','-','-','-','-',7,'-','-']]
+        self.game_matrix = []
+        self.canvas = Canvas(self, width=C.FIELD_SIDE, height=C.FIELD_SIDE)
+        self.canvas.grid(row=0, column=1)
+        self.canvas.bind("<Button-1>", self.button_click)
+        self.focused_cell = None
         self.draw_field()
-        self.draw_numbers()
         self.draw_player_list()
         self.draw_buttons()
         self.client = client
         self.game_id = game_id
         self.username = username
-        
+        self.update_field_from_server()
+
+    def update_field_from_server(self):
+        self.game_matrix = self.client.get_game_field(self.game_id)
+        self.draw_numbers()
+
+
+    def button_click(self, event):
+        if self.canvas.find_withtag(CURRENT):
+            tags = [tag for tag in self.canvas.gettags(CURRENT)]
+            if 'cell' in tags:
+                self.canvas.itemconfig(CURRENT, width=3, outline='red')
+                self.canvas.tag_raise(CURRENT)
+                self.canvas.tag_raise('numbers')
+                self.canvas.update_idletasks()
+                if self.focused_cell != None:
+                    if self.canvas.find_withtag('%d%d'%self.focused_cell): print 'yes'
+                    self.canvas.itemconfig('%d%d'%self.focused_cell, width=1, outline='black')
+                    self.canvas.tag_lower('%d%d'%self.focused_cell)
+                    self.canvas.update_idletasks()
+                self.focused_cell = (int(tags[0][0]), int(tags[0][1]))
+
     def draw_field(self):
         #draws sudoku field on the canvas
         #each cell is drawn as rectangle and after that larger rectangles
         #are drawn on top to highlight 3x3 box borders
-        self.canvas = Canvas(self, width=C.FIELD_SIDE, height=C.FIELD_SIDE)
-        self.canvas.grid(row=0, column=1)
-        
+
         for i in range(9):
             for j in range(9):
                 x0 = C.PADDING + i * C.CELL_SIDE
                 y0 = C.PADDING + j * C.CELL_SIDE
                 x1 = x0 + C.CELL_SIDE
                 y1 = y0 + C.CELL_SIDE
-                self.canvas.create_rectangle(x0, y0, x1, y1)
+                self.canvas.create_rectangle(x0, y0, x1, y1, tags=('%d%d'%(j,i), 'cell'), fill='white')
         for i in range(3):
             for j in range(3):
                 x0 = C.PADDING + i*3 * C.CELL_SIDE
@@ -62,7 +76,7 @@ class GameField(Frame):
                 x=C.PADDING + i * C.CELL_SIDE + 0.5 * C.CELL_SIDE
                 y=C.PADDING + j * C.CELL_SIDE + 0.5 * C.CELL_SIDE
                 self.canvas.create_text(x, y, text=str(number), font=('Arial', 24,'bold'), tags='numbers')
-                
+
     def draw_player_list(self):
         #draws player list
         self.player_board = Text(self, height=30, width=20)

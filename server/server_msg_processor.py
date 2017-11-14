@@ -1,6 +1,7 @@
 from common.message_processor import MessageProcessor
 import common.constants as C
 import common.message_types as T
+from common.object_factory import ObjectFactory
 import os.path
 from os import listdir
 from os.path import isfile, join
@@ -56,7 +57,10 @@ class ServerMsgProcessor(object, MessageProcessor):
         pass
 
     def get_game_field(self):
-        pass
+        game_id = self._message
+        game_field = self.server.get_game_field(game_id)
+
+        return ObjectFactory.field_to_json(game_field), T.RESP_OK
 
     def __error(self, message):
         return message, T.RESP_ERR

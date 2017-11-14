@@ -3,6 +3,7 @@ import common.constants as C
 from common.custom_exceptions import CommunicationException, LogicException
 from common.message_publisher import MessagePublisher
 from common.message_receiver import MessageReceiver
+from common.object_factory import ObjectFactory
 from client.client_msg_processor import ClientMsgProcessor
 import common.message_types as T
 from socket import socket, AF_INET, SOCK_STREAM
@@ -68,7 +69,6 @@ class TcpClient():
             C.LOG.warning(msg)
             raise LogicException("Leaving game failed with: {}".format(msg))
 
-
     def get_all_games(self):
         msg, type = self.__send_message(" ", T.REQ_ALL_GAMES)
         if type == T.RESP_OK:
@@ -80,8 +80,13 @@ class TcpClient():
     def get_player_list(self):
         pass
         
-    def get_game_field(self):
-        pass
+    def get_game_field(self, game_id):
+        msg, type = self.__send_message(game_id, T.UPDATE_FIELD)
+        if type == T.RESP_OK:
+            return ObjectFactory.field_from_json(msg)
+        else:
+            C.LOG.warning(msg)
+            raise LogicException("Could not retreive new field from server: {}".format(msg))
         
     def send_new_nr(self):
         pass

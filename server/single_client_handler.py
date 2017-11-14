@@ -1,5 +1,7 @@
 import threading
 import common.constants as C
+import common.message_types as T
+from common.object_factory import ObjectFactory
 from common.message_receiver import MessageReceiver
 from common.message_publisher import MessagePublisher
 from server.server_msg_processor import ServerMsgProcessor
@@ -24,7 +26,7 @@ class SingleClientHandler(threading.Thread):
         self.__running = True
         self.__message_handler = MessageReceiver(socket=self.__client_socket, processor=self.__processor)
         self.__message_publisher = MessagePublisher(socket=self.__client_socket)
-
+        self.__lock = threading.Lock()
         C.LOG.debug('New client connected from')
         print self.__source
 
@@ -33,7 +35,15 @@ class SingleClientHandler(threading.Thread):
             response_to_send = self.__message_handler.receive()
 
             C.LOG.debug("Sending back to client: {}".format(response_to_send))
-            self.__message_publisher.publish(response_to_send)
+            self.__send_message_threadsafe(response_to_send)
+
+    def __send_message_threadsafe(self, message_and_type):
+        with self.__lock:
+            self.__message_publisher.publish(message_and_type)
+
+    def send_new_sudoku_field(self, field):
+        field_json = ObjectFactory.field_to_json(field)
+        self.__send_message_threadsafe((field_json, T.UPDATE_FIELD))
 
     def stop(self):
         self.__message_handler.stop()
