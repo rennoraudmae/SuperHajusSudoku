@@ -30,16 +30,19 @@ It will create the Sudoku game server, in where, it is possible to start games
 
 As it is multiplayer game, then that point can be done in two variations
 
-If there is only **one client**, then you must open the new game as well:
+**If there is only --one client--, then you must open the new game as well:**
 
 1. Specify the same port number, as you added for server
 2. Insert the same ip address, as server has
-3. Then have to fill the blanks
+3. Insert the username- it can be choosed from right side of an program "Choose a nickname"
+   or specified by user, but it must be longer than 8 characters
+4. After that push the button {Connect to server}
+5. Then have to fill the blanks
    - (insert new game) where the new game name must be specified
    - (insert the max players number) have to enter the number how many players can play that current game
 
-4. Under Available games should appear: the name of the game
-5. In the blank - (insert game id) you have enter the name from list of Available games.
+6. Under Available games should appear: the name of the game
+7. In the blank - (insert game id) you have enter the name from list of Available games.
 
 For example:
 
@@ -48,8 +51,23 @@ For example:
 - Available games: new_sudoku
 - Join a game inserting id: new_sudoku
 
-6. If all the blanks are filled then push the button {Join game}
-7. Finally the sudoku game_field will appear and you can start to play
+8. If all the blanks are filled then push the button {Join game}
+9. Finally the sudoku game_field will appear and you can start to play
+
+**Second Option to join the game, if game is already created**
+
+Steps from 1.-4. are basically all the same:
+
+1. Specify the same port number, as you added for server.
+2. Insert the same ip address, as server has.
+3. Insert the username: By logically taken, this should be different from previous player to recognize different players
+4. After that push the button {Connect to server}
+5. In here we can specify new game as described above in point 5. or we can just join with the game which is already
+   created. As under Available games should appear "new_sudoku", because previous player/client already made it.
+   So we can just join with the available game.
+6. If new_sudoku or whatever name of the game is inserted into blank "join a game inserting id" then we can start play
+   along by clickin {Join game}
+7. And again the sudoku game_field will appear and you can start to play
 
 
 
