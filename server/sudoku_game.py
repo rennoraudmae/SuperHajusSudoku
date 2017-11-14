@@ -50,7 +50,6 @@ class SudokuGame():
         return False
 
     def add_nr(self, nr, address):
-<<<<<<< HEAD
         x, y = address
         self.solution[x][y] == nr
 
@@ -60,13 +59,10 @@ class SudokuGame():
         if len(self.players) < 1:
             return True
         return False
-=======
-        self.trigger_field_change()
         pass
 
     def check_game_state(self):
         pass
->>>>>>> 0e1659d2bdaa51c314632ed9215565ffdc2e84be
 
     def add_player(self, username, source):
         if self.players.has_key(username):
