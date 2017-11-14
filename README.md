@@ -10,18 +10,17 @@ Server- where all the server side of communication is located
 
 Common- where all the common part of files are located, for server and client side both
 
-
-## How to use the program:
+## How to use the program
 
 ### First of all we have to start server side.
 
-For that it's needed to open main program file SuperHajusSudoku/server/main.py.
+For that it's needed to open main program file **SuperHajusSudoku/server/main.py**
 
 That will open the GUI, where it is needed to specify two parameters:
 
- 1. Port number which is by default 7777
- 2. Server host number which is by default 127.0.0.1, as a local ip address
- 3. Then have to push the button "Start server"
+ 1. Port number which is by default **7777**
+ 2. Server host number which is by default **127.0.0.1**, as a local ip address
+ 3. Then have to push the button **"Start server"**
 
 It will create the Sudoku game server, in where, it is possible to start games
 
@@ -30,18 +29,18 @@ It will create the Sudoku game server, in where, it is possible to start games
 
 As it is multiplayer game, then that point can be done in two variations
 
-**If there is only --one client--, then you must open the new game as well:**
+**If there is only *one client*, then you must open the new game as well:**
 
-1. Specify the same port number, as you added for server
-2. Insert the same ip address, as server has
-3. Insert the username- it can be choosed from right side of an program "Choose a nickname"
-   or specified by user, but it must be longer than 8 characters
-4. After that push the button {Connect to server}
-5. Then have to fill the blanks
-   - (insert new game) where the new game name must be specified
-   - (insert the max players number) have to enter the number how many players can play that current game
+1. Specify the same port number, as you added for server.
+2. Insert the same ip address, as server has.
+3. Insert the username - it can be chosen from right side of a program "Choose a nickname"
+   or specified by user, but it must be at least 8 characters.
+4. After that push the button {Connect to server}.
+5. Then have to fill the blanks:
+   - (insert new game) where the new game name must be specified.
+   - (insert the max players number) have to enter the number how many players can play current game.
 
-6. Under Available games should appear: the name of the game
+6. Under Available games should appear: the name of the game.
 7. In the blank - (insert game id) you have enter the name from list of Available games.
 
 For example:
@@ -51,23 +50,23 @@ For example:
 - Available games: new_sudoku
 - Join a game inserting id: new_sudoku
 
-8. If all the blanks are filled then push the button {Join game}
-9. Finally the sudoku game_field will appear and you can start to play
+8. If all the blanks are filled then push the button {Join game}.
+9. Finally the sudoku game_field will appear and you can start to play.
 
 **Second Option to join the game, if game is already created**
 
-Steps from 1.-4. are basically all the same:
+Steps from 1.-4. are basically the same:
 
 1. Specify the same port number, as you added for server.
 2. Insert the same ip address, as server has.
-3. Insert the username: By logically taken, this should be different from previous player to recognize different players
-4. After that push the button {Connect to server}
+3. Insert the username: By logically taken, this should be different from previous player to recognize different players.
+4. After that push the button {Connect to server}.
 5. In here we can specify new game as described above in point 5. or we can just join with the game which is already
    created. As under Available games should appear "new_sudoku", because previous player/client already made it.
    So we can just join with the available game.
-6. If new_sudoku or whatever name of the game is inserted into blank "join a game inserting id" then we can start play
-   along by clickin {Join game}
-7. And again the sudoku game_field will appear and you can start to play
+6. If new_sudoku or whatever name of the game is inserted into blank "join a game inserting id" then we can start to play
+   along by clicking {Join game}.
+7. And again the sudoku game_field will appear and you can start to play.
 
 
 

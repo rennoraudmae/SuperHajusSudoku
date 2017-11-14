@@ -22,17 +22,16 @@ class SingleClientHandler(threading.Thread):
         self.__source = self.kwargs['source']
         self.__client_socket = self.kwargs['client_socket']
         self.__server = self.kwargs['server']
-        self.__processor = ServerMsgProcessor(self.__server)
+        self.__processor = ServerMsgProcessor(self.__server, self.__source)
         self.__running = True
         self.__message_handler = MessageReceiver(socket=self.__client_socket, processor=self.__processor)
         self.__message_publisher = MessagePublisher(socket=self.__client_socket)
         self.__lock = threading.Lock()
-        C.LOG.debug('New client connected from')
-        print self.__source
+        C.LOG.debug('New client connected from {}'.format(self.__source))
 
     def run(self):
         while self.__running:
-            response_to_send = self.__message_handler.receive()
+            response_to_send = self.__message_handler.receive(50)
 
             C.LOG.debug("Sending back to client: {}".format(response_to_send))
             self.__send_message_threadsafe(response_to_send)

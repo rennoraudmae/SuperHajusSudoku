@@ -12,9 +12,10 @@ This is server side message processor, which processes only server specific mess
 
 
 class ServerMsgProcessor(object, MessageProcessor):
-    def __init__(self, server):
+    def __init__(self, server, source):
         super(ServerMsgProcessor, self).__init__()
         self.server = server
+        self.source = source
 
     def ping(self):
         return "", T.RESP_OK
@@ -43,7 +44,7 @@ class ServerMsgProcessor(object, MessageProcessor):
         params = self._message.split(":")
         game_id = params[0]
         username = params[1]
-        self.server.add_player(game_id, username)
+        self.server.add_player(game_id, username, self.source)
         return " ", T.RESP_OK
 
     def leave_game(self):

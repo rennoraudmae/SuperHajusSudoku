@@ -8,6 +8,7 @@ from client.client_msg_processor import ClientMsgProcessor
 import common.message_types as T
 from socket import socket, AF_INET, SOCK_STREAM
 from socket import error as soc_error, timeout
+import time
 import sys
 
 '''
@@ -21,6 +22,8 @@ class TcpClient():
         self.__host = host
         self.__port = port
         self.__connected = False
+        self.__running = True
+        self.__game_field = []
 
         try:
             self.__socket = socket(AF_INET, SOCK_STREAM)
@@ -32,20 +35,23 @@ class TcpClient():
             return
 
         self.__message_publisher = MessagePublisher(socket=self.__socket)
-        self.__message_receiver = MessageReceiver(socket=self.__socket, processor=ClientMsgProcessor())
+        self.__message_receiver = MessageReceiver(socket=self.__socket, processor=ClientMsgProcessor(self))
 
     def is_connected(self):
         return self.__connected
 
+    def update_field(self, field):
+        self.__game_field = field
+
     def send_message(self, message):
-        msg, type = self.__send_message(message, T.REQ_SIMPLE_MESSAGE)
+        msg, type = self.__send_message_threadsafe(message, T.REQ_SIMPLE_MESSAGE)
         if type == T.RESP_OK:
             C.LOG.info("Got answer to simple message: {}".format(msg))
         else:
             C.LOG.warning(msg)
 
     def new_game_request(self, game_name, max_players):
-        msg, type = self.__send_message("{}:{}".format(game_name, max_players), T.REQ_NEW_GAME)
+        msg, type = self.__send_message_threadsafe("{}:{}".format(game_name, max_players), T.REQ_NEW_GAME)
         if type == T.RESP_OK:
             C.LOG.info("New game created with id: {}".format(msg))
             return msg
@@ -54,7 +60,7 @@ class TcpClient():
             raise LogicException("New game creation failed with message: {}".format(msg))
 
     def join_game(self, game_id, username):
-        msg, type = self.__send_message("{}:{}".format(game_id, username), T.REQ_JOIN_GAME)
+        msg, type = self.__send_message_threadsafe("{}:{}".format(game_id, username), T.REQ_JOIN_GAME)
         if type == T.RESP_OK:
             C.LOG.info("Joined game with id: {}".format(game_id))
         else:
@@ -62,7 +68,7 @@ class TcpClient():
             raise LogicException("New game creation failed with message: {}".format(msg))
 
     def leave_game(self, game_id, username):
-        msg, type = self.__send_message("{}:{}".format(game_id, username), T.REQ_LEAVE_GAME)
+        msg, type = self.__send_message_threadsafe("{}:{}".format(game_id, username), T.REQ_LEAVE_GAME)
         if type == T.RESP_OK:
             C.LOG.info("Left game with id: {}".format(game_id))
         else:
@@ -70,7 +76,7 @@ class TcpClient():
             raise LogicException("Leaving game failed with: {}".format(msg))
 
     def get_all_games(self):
-        msg, type = self.__send_message(" ", T.REQ_ALL_GAMES)
+        msg, type = self.__send_message_threadsafe(" ", T.REQ_ALL_GAMES)
         if type == T.RESP_OK:
             return msg
         else:
@@ -79,9 +85,12 @@ class TcpClient():
     
     def get_player_list(self):
         pass
+
+    def get_game_field(self):
+        return self.__game_field
         
-    def get_game_field(self, game_id):
-        msg, type = self.__send_message(game_id, T.UPDATE_FIELD)
+    def request_game_field(self, game_id):
+        msg, type = self.__send_message_threadsafe(game_id, T.UPDATE_FIELD)
         if type == T.RESP_OK:
             return ObjectFactory.field_from_json(msg)
         else:
@@ -92,14 +101,15 @@ class TcpClient():
         msg, type = self.__send_message("{}:{}".format(nr, address), T.REQ_CHECK_NR)
         return type
 
-    def __send_message(self, message, type):
+    def __send_message_threadsafe(self, message, type):
         if not self.__connected:
             raise CommunicationException("Server not connected")
 
         if len(type) > 0:
             try:
                 self.__message_publisher.publish(message_and_type=(message, type))
-                return self.__message_receiver.receive()
+                received_message = self.__message_receiver.receive(50)
+                return received_message
             except soc_error as e:
                 C.LOG.error('Couldn\'t get response from server, error : %s' % str(e))
             except Exception as e:
