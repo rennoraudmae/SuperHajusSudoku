@@ -36,13 +36,21 @@ class SudokuGame():
         return (sudoku, solution)
 
     def check_nr(self, nr, address):
-        pass
+        x, y = address
+        if self.solution[x][y] == nr:
+            return True
+        return False
 
     def add_nr(self, nr, address):
-        pass
+        x, y = address
+        self.solution[x][y] == nr
 
-    def check_game_state(self):
-        pass
+    def game_over(self):
+        if self.sudoku == self.solution:
+            return True
+        if len(self.players) < 1:
+            return True
+        return False
 
     def add_player(self, username):
         player = Player(username)
