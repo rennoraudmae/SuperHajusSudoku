@@ -50,7 +50,9 @@ class GameField(Frame):
     def key_press(self, event):
         key = event.char
         if key in '123456789':
-            print key
+            address = self.focused_cell
+            self.client.check_nr(key, address, self.username, self.game_id)
+                
 
     def button_click(self, event):
 

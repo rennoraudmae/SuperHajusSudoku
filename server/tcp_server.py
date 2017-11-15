@@ -69,6 +69,10 @@ class TcpServer():
     def get_game_field(self, game_id):
         sudoku_game = self.__active_games[game_id]
         return sudoku_game.get_game_field()
+    
+    def check_nr(self, game_id, username, nr, address):
+        sudoku_game = self.__active_games[game_id]
+        return sudoku_game.check_nr(nr, address, username)
 
     def get_game_player_list(self, game_id):
         sudoku_game = self.__active_games[game_id]

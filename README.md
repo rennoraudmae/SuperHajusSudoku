@@ -27,6 +27,10 @@ It will create the Sudoku game server, in where, it is possible to start games
 
 ### Secondly must open the client side.
 
+For that it's needed to open main program file **SuperHajusSudoku/client/main.py**
+
+That will open the GUI, where it is needed to specify some parameters.
+
 As it is multiplayer game, then that point can be done in two variations
 
 **If there is only *one client*, then you must open the new game as well:**

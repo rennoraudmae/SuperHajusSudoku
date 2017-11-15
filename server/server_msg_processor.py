@@ -61,6 +61,19 @@ class ServerMsgProcessor(object, MessageProcessor):
         self.server.remove_player(game_id, username)
         return " ", T.RESP_OK
 
+    def get_player_list(self):
+        pass
+    
+    def check_nr(self):
+        params = self._message.split(":")
+        nr = params[0]
+        address = params[1]
+        game_id = params[2]
+        username = params[3]
+        if self.server.check_nr(game_id, username, nr, address):
+            return " ", T.RESP_OK
+        return " ", T.RESP_NOK
+        
     def player_list(self):
         game_id = self._message
         try:
