@@ -84,14 +84,6 @@ class TcpClient():
         else:
             C.LOG.warning(msg)
             raise LogicException("Game requesting failed with error: {}".format(msg))
-
-    def get_player_list(self):
-        msg, type = self.__send_message_threadsafe(game_id, T.REQ_PLAYER_LIST)
-        if type == T.RESP_OK:
-            return msg
-        else:
-            C.LOG.warning(msg)
-            raise LogicException("Player list requesting failed with error: {}".format(msg))
     
     def check_nr(self, nr, address, username, game_id):
         msg, type = self.__send_message_threadsafe("{}:{}".format(nr, address, game_id, username), T.REQ_CHECK_NR)
