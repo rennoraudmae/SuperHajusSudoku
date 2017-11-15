@@ -60,7 +60,7 @@ class ServerMsgProcessor(object, MessageProcessor):
         username = params[1]
         self.server.remove_player(game_id, username)
         return " ", T.RESP_OK
-    
+
     def check_nr(self):
         params = self._message.split(":")
         try:
