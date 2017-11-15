@@ -73,7 +73,7 @@ class ServerMsgProcessor(object, MessageProcessor):
             return e.message, T.RESP_ERR
         if self.server.check_nr(game_id, username, nr, address):
             return " ", T.RESP_OK
-        return " ", T.RESP_NOK
+        return "rejected", T.RESP_NOK
 
     def game_state(self):
         game_id = self._message

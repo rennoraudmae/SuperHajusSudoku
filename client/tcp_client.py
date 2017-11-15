@@ -101,7 +101,7 @@ class TcpClient():
             return msg
         else:
             C.LOG.warning(msg)
-            raise LogicException("Number check request failed with error: {}".format(msg))
+            raise LogicException("Game requesting failed with error: {}".format(msg))
     
     def get_game_field(self):
         return self.__game_field

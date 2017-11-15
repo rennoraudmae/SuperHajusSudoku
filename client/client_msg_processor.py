@@ -1,5 +1,6 @@
 from common.message_processor import MessageProcessor
 import common.constants as C
+import common.message_types as T
 from common.object_factory import ObjectFactory
 
 '''
@@ -21,3 +22,5 @@ class ClientMsgProcessor(object, MessageProcessor):
         self.client.update_field(field)
 
         return self.success()
+    def rejected(self):
+        return " ", T.RESP_NOK
