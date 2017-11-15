@@ -22,10 +22,16 @@ That will open the GUI, where it is needed to specify two parameters:
  2. Server host number which is by default **127.0.0.1**, as a local ip address
  3. Then have to push the button **"Start server"**
 
+![Server GUI](https://github.com/rennoraudmae/SuperHajusSudoku/blob/master/pictures/server.PNG)
+
 It will create the Sudoku game server, in where, it is possible to start games
 
 
 ### Secondly must open the client side.
+
+For that it's needed to open main program file **SuperHajusSudoku/client/main.py**
+
+That will open the GUI, where it is needed to specify some parameters.
 
 As it is multiplayer game, then that point can be done in two variations
 
@@ -36,12 +42,22 @@ As it is multiplayer game, then that point can be done in two variations
 3. Insert the username - it can be chosen from right side of a program "Choose a nickname"
    or specified by user, but it must be at least 8 characters.
 4. After that push the button {Connect to server}.
-5. Then have to fill the blanks:
+
+![Client GUI](https://github.com/rennoraudmae/SuperHajusSudoku/blob/master/pictures/client_1.PNG)
+
+
+5. Then you have to fill the blanks:
    - (insert new game) where the new game name must be specified.
    - (insert the max players number) have to enter the number how many players can play current game.
+6. And then create game button
+
+![Client GUI create game](https://github.com/rennoraudmae/SuperHajusSudoku/blob/master/pictures/client_2.png)
+
 
 6. Under Available games should appear: the name of the game.
 7. In the blank - (insert game id) you have enter the name from list of Available games.
+
+![Client GUI join game](https://github.com/rennoraudmae/SuperHajusSudoku/blob/master/pictures/client_3.PNG)
 
 For example:
 
@@ -71,6 +87,8 @@ Steps from 1.-4. are basically the same:
 7. And again the sudoku game_field will appear and you can start to play.
 8. For playing, you must follow the rules of sudoku, if you didn't know yet how to play then just type into google search
     sudoku basics or something and then you can start to guess numbers. Server will send you feedback numbers on gamefield.
+
+![Client GUI gameplay](https://github.com/rennoraudmae/SuperHajusSudoku/blob/master/pictures/client_4.PNG)
 
 
 **For leaving the game just push the button under game field "leave game"**
