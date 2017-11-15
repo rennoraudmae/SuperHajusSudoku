@@ -44,7 +44,8 @@ class SudokuGame():
         return (sudoku, solution)
 
     def check_nr(self, nr, address, username):
-        x, y = address
+        x = int(address[1])
+        y = int(address[4])
         if self.game_field[x][y] == nr:
             return False
         if self.solution[x][y] == nr:

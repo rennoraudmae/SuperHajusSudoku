@@ -63,7 +63,6 @@ class ServerMsgProcessor(object, MessageProcessor):
     
     def check_nr(self):
         params = self._message.split(":")
-        print self._message
         try:
             nr = params[0]
             address = params[1]
