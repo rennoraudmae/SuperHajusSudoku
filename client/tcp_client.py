@@ -8,6 +8,7 @@ from client.client_msg_processor import ClientMsgProcessor
 import common.message_types as T
 from socket import socket, AF_INET, SOCK_STREAM
 from socket import error as soc_error, timeout
+import threading
 import time
 import sys
 
@@ -24,6 +25,7 @@ class TcpClient():
         self.__connected = False
         self.__running = True
         self.__game_field = []
+        self.__lock = threading.Lock()
 
         try:
             self.__socket = socket(AF_INET, SOCK_STREAM)
@@ -82,7 +84,7 @@ class TcpClient():
         else:
             C.LOG.warning(msg)
             raise LogicException("Game requesting failed with error: {}".format(msg))
-    
+
     def get_player_list(self):
         msg, type = self.__send_message_threadsafe(game_id, T.REQ_PLAYER_LIST)
         if type == T.RESP_OK:
@@ -101,7 +103,7 @@ class TcpClient():
     
     def get_game_field(self):
         return self.__game_field
-        
+
     def request_game_field(self, game_id):
         msg, type = self.__send_message_threadsafe(game_id, T.UPDATE_FIELD)
         if type == T.RESP_OK:
@@ -109,21 +111,30 @@ class TcpClient():
         else:
             C.LOG.warning(msg)
             raise LogicException("Could not retreive new field from server: {}".format(msg))
-        
+
+    def request_players(self, game_id):
+        msg, type = self.__send_message_threadsafe(game_id, T.REQ_PLAYER_LIST)
+        if type == T.RESP_OK:
+            return ObjectFactory.players_from_json(msg)
+        else:
+            C.LOG.warning(msg)
+            raise LogicException("Could not retreive players list from server: {}".format(msg))
+
     def send_new_nr(self, nr, address):
         msg, type = self.__send_message("{}:{}".format(nr, address), T.REQ_CHECK_NR)
         return type
 
     def __send_message_threadsafe(self, message, type):
-        if not self.__connected:
-            raise CommunicationException("Server not connected")
+        with self.__lock:
+            if not self.__connected:
+                raise CommunicationException("Server not connected")
 
-        if len(type) > 0:
-            try:
-                self.__message_publisher.publish(message_and_type=(message, type))
-                received_message = self.__message_receiver.receive()
-                return received_message
-            except soc_error as e:
-                C.LOG.error('Couldn\'t get response from server, error : %s' % str(e))
-            except Exception as e:
-                C.LOG.error("Exception on processing response: {}".format(e))
+            if len(type) > 0:
+                try:
+                    self.__message_publisher.publish(message_and_type=(message, type))
+                    received_message = self.__message_receiver.receive()
+                    return received_message
+                except soc_error as e:
+                    C.LOG.error('Couldn\'t get response from server, error : %s' % str(e))
+                except Exception as e:
+                    C.LOG.error("Exception on processing response: {}".format(e))

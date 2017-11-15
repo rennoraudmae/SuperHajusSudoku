@@ -74,6 +74,10 @@ class TcpServer():
         sudoku_game = self.__active_games[game_id]
         return sudoku_game.check_nr(nr, address, username)
 
+    def get_game_player_list(self, game_id):
+        sudoku_game = self.__active_games[game_id]
+        return sudoku_game.get_players()
+
     def serve_forever(self):
         while self.__running:
             try:
