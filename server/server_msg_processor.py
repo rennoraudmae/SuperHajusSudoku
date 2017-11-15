@@ -19,7 +19,7 @@ class ServerMsgProcessor(object, MessageProcessor):
         self.source = source
 
     def ping(self):
-        return "", T.RESP_OK
+        return " ", T.RESP_OK
 
     def new_game(self):
         params = self._message.split(":")
@@ -74,6 +74,14 @@ class ServerMsgProcessor(object, MessageProcessor):
             return " ", T.RESP_OK
         return " ", T.RESP_NOK
         
+    def player_list(self):
+        game_id = self._message
+        try:
+            players = self.server.get_game_player_list(game_id)
+            return ObjectFactory.players_to_json(players), T.RESP_OK
+        except LogicException as e:
+            return e.message, T.RESP_ERR
+
     def get_game_field(self):
         game_id = self._message
         game_field = self.server.get_game_field(game_id)

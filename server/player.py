@@ -10,7 +10,7 @@ class Player():
 
     def get_username(self):
         return self.__username
-    
+
     def get_score(self):
         return self.__score
     
@@ -19,3 +19,7 @@ class Player():
     
     def decrease_score(self):
         self.__score -= 1
+
+    def get_score(self):
+        return self.__score
+
