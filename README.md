@@ -22,6 +22,8 @@ That will open the GUI, where it is needed to specify two parameters:
  2. Server host number which is by default **127.0.0.1**, as a local ip address
  3. Then have to push the button **"Start server"**
 
+![Server GUI](https://github.com/rennoraudmae/SuperHajusSudoku/blob/master/pictures/server.PNG)
+
 It will create the Sudoku game server, in where, it is possible to start games
 
 
