@@ -63,10 +63,14 @@ class ServerMsgProcessor(object, MessageProcessor):
 
     def check_nr(self):
         params = self._message.split(":")
-        nr = params[0]
-        address = params[1]
-        game_id = params[2]
-        username = params[3]
+        print self._message
+        try:
+            nr = params[0]
+            address = params[1]
+            game_id = params[2]
+            username = params[3]
+        except IndexError as e:
+            return e.message, T.RESP_ERR
         if self.server.check_nr(game_id, username, nr, address):
             return " ", T.RESP_OK
         return " ", T.RESP_NOK
