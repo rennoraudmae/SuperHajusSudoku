@@ -74,7 +74,15 @@ class ServerMsgProcessor(object, MessageProcessor):
         if self.server.check_nr(game_id, username, nr, address):
             return " ", T.RESP_OK
         return " ", T.RESP_NOK
-        
+
+    def game_state(self):
+        game_id = self._message
+        state = self.server.get_game_state(game_id)
+        if state is False:
+            return " ", T.RESP_OK
+        else:
+            return state, T.RESP_VOID
+
     def player_list(self):
         game_id = self._message
         try:

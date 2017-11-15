@@ -29,6 +29,8 @@ class GameField(Frame):
         self.game_id = game_id
         self.username = username
         self.update_field_from_server()
+        self.game_over = False
+        self.game_winner = ""
 
         receive_thread = threading.Thread(target=self.update_field_thread, args=())
         receive_thread.start()
@@ -37,12 +39,21 @@ class GameField(Frame):
         self.game_matrix = self.client.request_game_field(self.game_id)
         self.draw_numbers()
 
+    def update_game_state_from_server(self):
+        state = self.client.request_game_state(self.game_id)
+        if state is False:
+            return
+        else:
+            self.game_winner = state
+            self.game_over = True
+
     def update_players_list_from_server(self):
         players_list = self.client.request_players(self.game_id)
         self.update_players_list(players_list)
 
     def update_field_thread(self):
-        while 1:
+        while not self.game_over:
+            self.update_game_state_from_server()
             self.update_field_from_server()
             self.update_players_list_from_server()
             time.sleep(0.5)
@@ -52,7 +63,7 @@ class GameField(Frame):
         if key in '123456789':
             address = self.focused_cell
             self.client.check_nr(key, address, self.username, self.game_id)
-                
+
 
     def button_click(self, event):
 
@@ -107,6 +118,9 @@ class GameField(Frame):
 
     def update_players_list(self, players):
         self.player_board.delete(0, END)
+        if self.game_over:
+            self.player_board.insert(0, "Winner is {}".format(self.game_winner))
+            return
         self.player_board.insert(0, "Player   -   Score")
         for i, player in enumerate(players):
             player_str = "{}   -   {}".format(player[0], player[1])

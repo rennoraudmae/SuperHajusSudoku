@@ -65,6 +65,15 @@ class SudokuGame():
             return True
         return False
 
+    def get_winner(self):
+        winner = None
+        for player in self.players.values():
+            if winner == None or int(winner.get_score()) < int(player.get_score()):
+                winner = player
+        if winner is None:
+            return ""
+        return winner.get_username()
+
     def add_player(self, username, source):
         if self.players.has_key(username):
             raise LogicException("There is already someone in this game named {}".format(username))

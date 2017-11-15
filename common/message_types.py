@@ -7,6 +7,7 @@ REQ_GAME_FIELD = '6'
 REQ_PLAYER_LIST = '7'
 REQ_CHECK_NR = '8'
 UPDATE_FIELD = '9'
+REQ_GAME_STATE = '10'
 
 RESP_OK = 'a'
 RESP_NOK = 'b'
@@ -25,6 +26,7 @@ MSG_TYPES = {REQ_SIMPLE_MESSAGE: 'simple_message',
              REQ_LEAVE_GAME: 'leave_game',
              REQ_CHECK_NR: 'check_nr',
              UPDATE_FIELD: 'get_game_field',
+             REQ_GAME_STATE: 'game_state',
              #
              RESP_OK: 'success',
              RESP_NOK: 'rejected',

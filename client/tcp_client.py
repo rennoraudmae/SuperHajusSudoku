@@ -45,6 +45,14 @@ class TcpClient():
     def update_field(self, field):
         self.__game_field = field
 
+    def request_game_state(self, game_id):
+        msg, type = self.__send_message_threadsafe(game_id, T.REQ_GAME_STATE)
+        if type == T.RESP_OK:
+            C.LOG.info("Game still running")
+            return False
+        else:
+            return msg
+
     def send_message(self, message):
         msg, type = self.__send_message_threadsafe(message, T.REQ_SIMPLE_MESSAGE)
         if type == T.RESP_OK:
