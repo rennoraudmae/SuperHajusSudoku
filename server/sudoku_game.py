@@ -44,19 +44,23 @@ class SudokuGame():
         return (sudoku, solution)
 
     def check_nr(self, nr, address, username):
-        x, y = address
-        if self.game_field[x][y] == nr:
+        x = int(address[1])
+        y = int(address[4])
+        try:
+            if self.game_field[x][y] == int(nr):
+                return False
+            if self.solution[x][y] == int(nr):
+                self.__add_nr(nr, (x, y))
+                self.players[username].increase_score()
+                return True
+        except ValueError:
             return False
-        if self.solution[x][y] == nr:
-            self.__add_nr(nr, address)
-            self.players[username].increase_score()
-            return True
         self.players[username].decrease_score()
         return False
 
     def __add_nr(self, nr, address):
         x, y = address
-        self.solution[x][y] = nr
+        self.game_field[x][y] = int(nr)
 
     def game_over(self):
         if self.game_field == self.solution:
